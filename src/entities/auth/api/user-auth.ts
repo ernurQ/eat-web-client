@@ -1,4 +1,5 @@
 import { eatWebApi } from '@/shared/api'
+import { saveAccessToken } from '@/shared/utils'
 
 import {
 	IUserLogin,
@@ -13,7 +14,11 @@ const userAuthApi = eatWebApi.injectEndpoints({
 				method: 'POST',
 				url: '/auth/user/login',
 				body
-			})
+			}),
+			onQueryStarted: async (_, { queryFulfilled }) => {
+				const { data } = await queryFulfilled
+				saveAccessToken(data.token)
+			}
 		}),
 
 		registerUser: builder.mutation<void, IUserRegister>({
