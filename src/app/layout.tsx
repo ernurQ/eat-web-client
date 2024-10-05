@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { PropsWithChildren } from 'react'
 
 import './globals.css'
+import { Providers } from '@/app/_providers'
 
 const font = Inter({ subsets: ['cyrillic'] })
 
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html lang='en'>
-			<body className={font.className}>{children}</body>
+			<body className={font.className}>
+				<Providers>{children}</Providers>
+			</body>
 		</html>
 	)
 }

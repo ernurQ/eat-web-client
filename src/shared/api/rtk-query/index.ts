@@ -1,0 +1,1 @@
+export { eatWebApi } from './api'
