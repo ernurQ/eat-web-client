@@ -7,3 +7,4 @@ export {
 } from './api/user-products-api'
 
 export { ProductsList } from './ui/Products-list'
+export { OrdersList } from './ui/Orders-list'
