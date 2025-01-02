@@ -3,6 +3,7 @@ import { Open_Sans } from 'next/font/google'
 import { PropsWithChildren } from 'react'
 
 import './globals.css'
+import { Providers } from '@/app/_providers/providers'
 
 const font = Open_Sans({
 	subsets: ['cyrillic'],
@@ -17,7 +18,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html lang='ru'>
-			<body className={font.className}>{children}</body>
+			<body className={font.className}>
+				<Providers>{children}</Providers>
+			</body>
 		</html>
 	)
 }
