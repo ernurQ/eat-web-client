@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { cn } from '@/shared/lib/classnames'
 import { Header } from '@/shared/ui/header'
 
@@ -10,7 +12,9 @@ export function CatalogSection() {
 		>
 			<Header>Каталог</Header>
 
-			<ProductCatalog />
+			<Suspense>
+				<ProductCatalog />
+			</Suspense>
 		</section>
 	)
 }
