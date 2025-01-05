@@ -3,8 +3,9 @@ import { uniq } from 'lodash'
 import { sleep } from '@/shared/lib/sleep'
 import { PaginationParams } from '@/shared/types/pagination.types'
 
+import type { GetProducts } from '@/entities/products/api/types'
 import { mockProducts } from '@/entities/products/mock-data'
-import type { GetProducts, Product } from '@/entities/products/product-types'
+import type { Product } from '@/entities/products/product-types'
 
 export const productsApi = {
 	getProducts: async ({

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { queryClient } from '@/shared/api/query-client'
 import { PaginationParams } from '@/shared/types/pagination.types'
 
-import { productsApi } from '@/entities/products/products-api'
+import { productsApi } from '@/entities/products/api/products-api'
 
 const FAVORITES_KEY = 'favorites'
 

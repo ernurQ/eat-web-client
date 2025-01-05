@@ -1,6 +1,6 @@
 import { UndefinedInitialDataOptions, useQuery } from '@tanstack/react-query'
 
-import { productsApi } from '@/entities/products/products-api'
+import { productsApi } from '@/entities/products/api/products-api'
 
 const CATEGORIES_KEY = 'categories'
 

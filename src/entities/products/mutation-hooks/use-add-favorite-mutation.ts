@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { invalidateFavoritesQuery } from '@/entities/products/hooks/use-favorites-query'
-import { productsApi } from '@/entities/products/products-api'
+import { productsApi } from '@/entities/products/api/products-api'
+import { invalidateFavoritesQuery } from '@/entities/products/query-hooks/use-favorites-query'
 
 export function useAddFavoriteMutation() {
 	return useMutation({

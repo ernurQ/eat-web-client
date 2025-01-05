@@ -24,10 +24,3 @@ export type ProductFullData = Product & {
 		carbohydrates?: number
 	}
 }
-
-export type GetProducts = {
-	name?: string
-	category?: string
-	offset?: number
-	limit?: number
-}
