@@ -3,7 +3,7 @@ export const routes = {
 	welcome: () => '/welcome',
 	cart: () => '/cart',
 	catalog: () => '/catalog',
-	favorite: () => '/favorite',
+	favorite: () => '/favorites',
 	contacts: () => '/contacts',
 	me: () => '/me',
 

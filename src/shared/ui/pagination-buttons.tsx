@@ -4,11 +4,21 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import { cn } from '@/shared/lib/classnames'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
 
-import { CATALOG_PAGE } from '@/features/products/catalog/constants'
-import { useCatalogProducts } from '@/features/products/catalog/use-catalog-products'
+type Props = {
+	currentPage: number
+	pageSearchParam: string
+	disabled?: boolean
+	hasNextPage?: boolean
+	className?: string
+}
 
-export function ControlButtons() {
-	const { currentPage, isPending, hasNextPage } = useCatalogProducts()
+export function PaginationButtons({
+	currentPage,
+	pageSearchParam,
+	disabled,
+	hasNextPage,
+	className
+}: Props) {
 	const [isRedirecting, startRedirecting] = useTransition()
 
 	const [pageParams, setPageParams] = useState(
@@ -17,7 +27,7 @@ export function ControlButtons() {
 	const setSearchParam = useSetSearchParam()
 	const setCurrentPage = (page: number) => {
 		startRedirecting(() => {
-			setSearchParam({ [CATALOG_PAGE]: `${page}` })
+			setSearchParam({ [pageSearchParam]: `${page}` })
 		})
 		if (pageParams.length < page) {
 			setPageParams(Array.from({ length: page }, (_, index) => index + 1))
@@ -25,14 +35,10 @@ export function ControlButtons() {
 	}
 
 	return (
-		<div
-			className={
-				'flex justify-center gap-5 absolute bottom-0 right-1/2 translate-x-1/2'
-			}
-		>
+		<div className={cn('flex justify-center gap-5', className)}>
 			<ControlButton
 				onClick={() => setCurrentPage(currentPage - 1)}
-				disabled={currentPage === 1 || isPending || isRedirecting}
+				disabled={currentPage === 1 || disabled || isRedirecting}
 			>
 				<AiOutlineArrowLeft />
 			</ControlButton>
@@ -43,7 +49,7 @@ export function ControlButtons() {
 						onClick={() => setCurrentPage(page)}
 						key={page}
 						isActive={page === currentPage}
-						disabled={isPending || isRedirecting || currentPage === page}
+						disabled={disabled || isRedirecting || currentPage === page}
 					>
 						{page}
 					</ControlButton>
@@ -54,7 +60,7 @@ export function ControlButtons() {
 				onClick={() => {
 					setCurrentPage(currentPage + 1)
 				}}
-				disabled={!hasNextPage || isPending || isRedirecting}
+				disabled={!hasNextPage || disabled || isRedirecting}
 			>
 				<AiOutlineArrowRight />
 			</ControlButton>

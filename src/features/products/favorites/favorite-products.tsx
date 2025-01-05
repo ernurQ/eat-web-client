@@ -1,22 +1,18 @@
-'use client'
-
 import { cn } from '@/shared/lib/classnames'
 import { Header } from '@/shared/ui/header'
 import { PaginationButtons } from '@/shared/ui/pagination-buttons'
 
 import { CATALOG_PAGE } from '@/features/products/catalog/constants'
-import { ProductCategorySelect } from '@/features/products/catalog/product-category-select'
-import { ProductNameSearch } from '@/features/products/catalog/product-name-search'
-import { useCatalogProducts } from '@/features/products/catalog/use-catalog-products'
+import { useFavoriteProducts } from '@/features/products/favorites/use-favorite-products'
 import { ProductsList } from '@/features/products/products-list'
 
-export function ProductCatalog() {
+export function FavoriteProducts() {
 	const {
 		data: products,
 		isPending,
 		currentPage,
 		hasNextPage
-	} = useCatalogProducts()
+	} = useFavoriteProducts()
 
 	return (
 		<div
@@ -25,10 +21,8 @@ export function ProductCatalog() {
 				'items-center sm:items-start relative pb-10'
 			)}
 		>
-			<Header className={'mx-auto mb-10'}>Каталог</Header>
+			<Header className={'mx-auto mb-10'}>Любимое</Header>
 
-			<ProductNameSearch />
-			<ProductCategorySelect />
 			<ProductsList
 				products={products}
 				isPending={isPending}

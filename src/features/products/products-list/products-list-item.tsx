@@ -1,11 +1,14 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 
 import { Product } from '@/entities/products'
+
+import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
 
 type Props = {
 	product: Product
@@ -35,7 +38,7 @@ export function ProductsListItem({ product }: Props) {
 					/>
 				</Link>
 
-				<div className={'flex mt-2 justify-between text-base'}>
+				<div className={'flex mt-2 justify-between text-base items-start'}>
 					<div className={'flex flex-wrap items-center gap-x-2'}>
 						<Link
 							href={routes.product(product.id)}
@@ -51,11 +54,11 @@ export function ProductsListItem({ product }: Props) {
 							{product.department.name}
 						</Link>
 					</div>
-					{product.isFavorite ? (
-						<AiFillHeart className={'text-xl text-red-600 flex-shrink-0'} />
-					) : (
-						<AiOutlineHeart className={'text-xl flex-shrink-0'} />
-					)}
+
+					<AddToFavoritesButton
+						isFavorite={product.isFavorite}
+						productId={product.id}
+					/>
 				</div>
 			</div>
 

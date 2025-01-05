@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { ProductCatalog } from '@/features/products/catalog/product-catalog'
+import { ProductCatalog } from '@/features/products/catalog'
 
 export function CatalogSection() {
 	return (
