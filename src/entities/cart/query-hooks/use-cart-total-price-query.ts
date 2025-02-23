@@ -1,6 +1,6 @@
 import { InvalidateQueryFilters, useQuery } from '@tanstack/react-query'
 
-import { queryClient } from '@/shared/api/query-client'
+import { queryClient } from '@/app/api/query-client'
 
 import { cartApi } from '@/entities/cart/cart-api'
 

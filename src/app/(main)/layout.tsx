@@ -6,9 +6,9 @@ import { Navbar } from '@/app/(main)/_ui/navbar'
 export default function MainLayout({ children }: PropsWithChildren) {
 	return (
 		<>
-			<Navbar />
-			{children}
-			<Footer />
+				<Navbar />
+				{children}
+				<Footer />
 		</>
 	)
 }

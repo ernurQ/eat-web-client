@@ -20,12 +20,14 @@ export function ProductsListItem({ product }: ListItemProps) {
 		id,
 		thumbnail,
 		name,
+		discountedPrice,
 		price,
-		quantity: initQuantity,
-		maxQuantity
+		quantity,
+		maxQuantity,
 	} = product
-	const [quantity, setQuantity] = useState(initQuantity)
-	const totalPrice = price * quantity
+	
+	const [initQuantity, setInitQuantity] = useState(quantity)
+	const totalPrice = discountedPrice ? discountedPrice * initQuantity : price * initQuantity;
 	return (
 		<li
 			className={cn(
@@ -55,11 +57,11 @@ export function ProductsListItem({ product }: ListItemProps) {
 			</Link>
 			<div className={'w-48 sm:w-full'}>
 				<Link href={routes.product(id)}>{name}</Link>
-				<div className={'text-[#F7C04F] font-bold'}>{price}</div>
+				<div className={'text-[#F7C04F] font-bold'}>{discountedPrice}</div>
 				<ProductQuantityForm
 					id={id}
-					quantity={quantity}
-					setQuantity={setQuantity}
+					quantity={initQuantity}
+					setQuantity={setInitQuantity}
 					maxQuantity={maxQuantity}
 				/>
 				<div className={'flex justify-between mt-3 w-48 sm:mt-20'}>

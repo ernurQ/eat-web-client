@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { BsBasket3, BsPersonCircle } from 'react-icons/bs'
 
@@ -11,7 +11,28 @@ import { EatWebLogo } from '@/shared/ui/eat-web-logo'
 
 export function Navbar() {
 	const [showMobileNav, setShowMobileNav] = useState<boolean>(false)
+	const [userEmail, setUserEmail] = useState<string>('')
 	const toggleShowNav = () => setShowMobileNav((show) => !show)
+
+	useEffect(() => {
+		async function fetchUser() {
+			try {
+				const res = await fetch('/api/user/me', { credentials: 'include' })
+				if (res.ok) {
+					const data = await res.json()
+					// If you've added email in your JWT payload:
+					setUserEmail(data.user.email)
+					// Otherwise, you might only have the userId.
+				} else {
+					setUserEmail('')
+				}
+			} catch (error) {
+				console.error('Error fetching user:', error)
+				setUserEmail('')
+			}
+		}
+		fetchUser()
+	}, [])
 
 	return (
 		<nav
@@ -21,13 +42,13 @@ export function Navbar() {
 				'relative overflow-x-clip'
 			)}
 		>
-			<Link href={routes.aboutUs()}>
+			<Link href={routes.welcome()}>
 				<EatWebLogo />
 			</Link>
 
 			<NavList className={cn('hidden sm:flex', 'justify-center gap-10')} />
 
-			<ul className={'flex justify-center gap-5'}>
+			<ul className={'flex justify-center items-center gap-5'}>
 				<li className={'flex justify-center items-center'}>
 					<Link href={routes.cart()}>
 						<BsBasket3 />
@@ -40,6 +61,13 @@ export function Navbar() {
 					>
 						<BsPersonCircle />
 					</Link>
+				</li>
+				<li>
+					{userEmail ? (
+						<span className='font-semibold text-green-700'>{userEmail}</span>
+					) : (
+						<Link href={routes.authLogin()}>Войти/Зарегистрироваться</Link>
+					)}
 				</li>
 
 				<li className={cn('sm:hidden', 'flex justify-center items-center')}>

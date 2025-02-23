@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Open_Sans } from 'next/font/google'
+import { Montserrat, Open_Sans } from 'next/font/google'
 import { PropsWithChildren } from 'react'
 
 import './globals.css'
@@ -10,6 +10,10 @@ const font = Open_Sans({
 	weight: ['400', '700']
 })
 
+const montserrat = Montserrat({
+	subsets: ['cyrillic'],
+})
+
 export const metadata: Metadata = {
 	title: 'Eat web',
 	description: 'Connecting Sellers and Buyers to Prevent Food Waste'
@@ -18,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html lang='ru'>
-			<body className={font.className}>
+			<body className={montserrat.className}>
 				<Providers>{children}</Providers>
 			</body>
 		</html>

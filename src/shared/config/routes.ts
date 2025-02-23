@@ -7,6 +7,9 @@ export const routes = {
 	contacts: () => '/contacts',
 	me: () => '/me',
 
+	authLogin: () => '/auth/login',
+	authReg: () => '/auth/registration',
+
 	product: (id: string) => `/products/${id}`,
 	department: (id: string) => `/departments/${id}`
 }

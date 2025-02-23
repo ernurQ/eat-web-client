@@ -5,7 +5,7 @@ import { useCartProductsQuery } from '@/entities/cart'
 import { ProductsListItem } from '@/features/products/cart/products-list-item'
 
 export function ProductsList() {
-	const { data: products, isPending, isError } = useCartProductsQuery()
+	const { data: products, isPending, isError } = useCartProductsQuery()	
 
 	if (isPending) return <Skeleton />
 	if (isError) throw Error('feature.cart.product-list')

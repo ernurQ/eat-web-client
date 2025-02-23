@@ -1,92 +1,100 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-
-import { routes } from '@/shared/config/routes'
+import { useState } from 'react'
 import { cn } from '@/shared/lib/classnames'
-
 import { Product } from '@/entities/products'
-
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
+import ProductModal from './ProductModal'
 
 type Props = {
 	product: Product
 }
 
+type PriceProps = {
+	price: number
+	discountedPrice: number
+}
+
 export function ProductsListItem({ product }: Props) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
 	return (
-		<li
-			className={cn('w-48 mx-auto bg-white', 'flex flex-col justify-between')}
-		>
-			<div>
-				<Link
-					href={routes.product(product.id)}
-					className={'relative h-48 w-48 block flex-shrink mx-auto'}
-				>
-					<Image
-						src={product.thumbnail}
-						alt={product.name}
-						fill
-						sizes={
-							'(max-width: 640px) 100vw, ' +
-							'(max-width: 768px) 50vw, ' +
-							'(max-width: 1024px) 33vw, ' +
-							'25vw'
-						}
-						className={'rounded'}
-					/>
-				</Link>
+		<>
+			<li
+				className={cn('w-48 mx-auto bg-white', 'flex flex-col justify-between')}
+			>
+				<div>
+					<button
+						onClick={() => setIsModalOpen(true)}
+						className={'relative h-48 w-48 block flex-shrink mx-auto'}
+					>
+						<Image
+							src={product.thumbnail}
+							alt={product.name}
+							fill
+							sizes={
+								'(max-width: 640px) 100vw, ' +
+								'(max-width: 768px) 50vw, ' +
+								'(max-width: 1024px) 33vw, ' +
+								'25vw'
+							}
+							className={'rounded'}
+						/>
+					</button>
 
-				<div className={'flex mt-2 justify-between text-base items-start'}>
-					<div className={'flex flex-wrap items-center gap-x-2'}>
-						<Link
-							href={routes.product(product.id)}
-							className={'font-medium'}
-						>
-							{product.name}
-						</Link>
-						<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
-						<Link
-							href={routes.department(product.department.id)}
-							className={'text-[#228536]'}
-						>
-							{product.department.name}
-						</Link>
+					<div className={'flex mt-2 justify-between text-base items-start'}>
+						<div className={'flex flex-wrap items-center gap-x-2'}>
+							<button
+								onClick={() => setIsModalOpen(true)}
+								className={'font-medium'}
+							>
+								{product.name}
+							</button>
+							<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
+							<button
+								onClick={() => setIsModalOpen(true)}
+								className={'text-[#228536]'}
+							>
+								{product.department.name}
+							</button>
+						</div>
+
+						<AddToFavoritesButton
+							isFavorite={product.isFavorite}
+							productId={product.id}
+						/>
 					</div>
+				</div>
 
-					<AddToFavoritesButton
-						isFavorite={product.isFavorite}
-						productId={product.id}
+				<div className={'flex flex-wrap justify-between mt-2'}>
+					<button
+						onClick={() => setIsModalOpen(true)}
+						className={
+							'bg-[#F7C04F] h-11 w-24 flex justify-center items-center rounded text-white hover:bg-[#ba903c] transition-colors ease-in-out duration-300'
+						}
+					>
+						Купить
+					</button>
+					<Price
+						price={product.price}
+						discountedPrice={product.discountedPrice ?? 0}
 					/>
 				</div>
-			</div>
+			</li>
 
-			<div className={'flex flex-wrap justify-between mt-2'}>
-				<Link
-					href={routes.product(product.id)}
-					className={
-						'bg-[#F7C04F] h-11 w-20 flex justify-center items-center rounded text-white'
-					}
-				>
-					Купить
-				</Link>
-				<Price
-					price={product.price}
-					discount={product.discount}
+			{isModalOpen && (
+				<ProductModal
+					product={product}
+					onClose={() => setIsModalOpen(false)}
 				/>
-			</div>
-		</li>
+			)}
+		</>
 	)
 }
 
-type PriceProps = {
-	price: number
-	discount: number
-}
-
-function Price({ price, discount }: PriceProps) {
-	if (discount === 0)
+export function Price({ price, discountedPrice }: PriceProps) {
+	if (discountedPrice === 0 || undefined)
 		return (
 			<div
 				className={cn(
@@ -105,13 +113,15 @@ function Price({ price, discount }: PriceProps) {
 				'text-center flex flex-col justify-center'
 			)}
 		>
-			<div className={'font-bold'}>
-				{((price * discount) / 100).toFixed(2)} тг
-			</div>
+			<div className={'font-bold'}>{discountedPrice} тг</div>
 			<div className={'text-sm flex justify-center items-center gap-1'}>
-				<span className={'line-through decoration-[#228536]'}>{price}</span>
-				<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
-				<div className={'text-[#228536]'}>-{100 - discount}%</div>
+				<span className={'line-through decoration-red-500 text-[10px]'}>
+					{price}
+				</span>
+				<div className={'h-1 w-1 rounded-full bg-red-500'} />
+				<div className={'text-red-500 text-[10px]'}>
+					-{Math.round(((price - discountedPrice) / price) * 100)}%
+				</div>
 			</div>
 		</div>
 	)

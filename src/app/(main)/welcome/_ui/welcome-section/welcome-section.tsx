@@ -22,15 +22,15 @@ export function WelcomeSection() {
 
 			<h1
 				className={
-					'text-2xl font-semibold text-center px-10 mt-10 clear-both md:clear-none lg:text-3xl'
+					'text-2xl font-montserrat text-center px-10 mt-10 clear-both md:clear-none lg:text-5xl'
 				}
 			>
-				Добро пожаловать в EatWEB!
+				Добро пожаловать в <span className='font-medium'>EatWEB!</span>
 			</h1>
 
 			<p
 				className={
-					'text-sm font-semibold text-center px-10 mt-1 text-[#228536]'
+					'text-2xl font-semibold text-center px-10 mt-1 text-[#228536]'
 				}
 			>
 				Потребляй правильно. Экологично. Вкусно. Выгодно.
@@ -39,7 +39,7 @@ export function WelcomeSection() {
 			<Link
 				href={routes.aboutUs()}
 				className={
-					'w-44 h-11 bg-[#cddf95] rounded mx-auto flex justify-center items-center mt-5 text-base font-semibold'
+					'w-44 h-11 bg-[#cddf95] rounded-2xl mx-auto flex justify-center items-center mt-5 text-base font-semibold'
 				}
 			>
 				Подробнее о нас
