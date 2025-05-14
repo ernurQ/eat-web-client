@@ -7,6 +7,10 @@ export const routes = {
 	contacts: () => '/contacts',
 	me: () => '/me',
 
+	orders: () => '/owner/orders',
+	companyProducts: () => '/owner/products',
+	companyAccount: () => '/owner/account',
+
 	authLogin: () => '/auth/login',
 	authReg: () => '/auth/registration',
 

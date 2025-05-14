@@ -2,115 +2,160 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { AiOutlineMenu } from 'react-icons/ai'
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
 import { BsBasket3, BsPersonCircle } from 'react-icons/bs'
+import { usePathname } from 'next/navigation'
 
 import { routes } from '@/shared/config/routes'
-import { cn } from '@/shared/lib/classnames'
 import { EatWebLogo } from '@/shared/ui/eat-web-logo'
+import { cn } from '@/shared/lib/classnames'
 
 export function Navbar() {
-	const [showMobileNav, setShowMobileNav] = useState<boolean>(false)
-	const [userEmail, setUserEmail] = useState<string>('')
-	const toggleShowNav = () => setShowMobileNav((show) => !show)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
+  const pathname = usePathname()
 
-	useEffect(() => {
-		async function fetchUser() {
-			try {
-				const res = await fetch('/api/user/me', { credentials: 'include' })
-				if (res.ok) {
-					const data = await res.json()
-					// If you've added email in your JWT payload:
-					setUserEmail(data.user.email)
-					// Otherwise, you might only have the userId.
-				} else {
-					setUserEmail('')
-				}
-			} catch (error) {
-				console.error('Error fetching user:', error)
-				setUserEmail('')
-			}
-		}
-		fetchUser()
-	}, [])
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await fetch('/api/user/me', { credentials: 'include' })
+        if (res.ok) {
+          const { user } = await res.json()
+          setUserEmail(user.email || '')
+        }
+      } catch {
+        setUserEmail('')
+      }
+    }
+    fetchUser()
+  }, [])
 
-	return (
-		<nav
-			className={cn(
-				'bg-white w-full flex justify-between items-center h-14 text-base',
-				'px-9 sm:px-5 md:px-10',
-				'relative overflow-x-clip'
-			)}
-		>
-			<Link href={routes.welcome()}>
-				<EatWebLogo />
-			</Link>
+  return (
+    <nav className="left-0 right-0 bg-white shadow-md z-50">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
+        {/* Logo */}
+        <Link href={routes.welcome()} className="flex-shrink-0">
+          <EatWebLogo />
+        </Link>
 
-			<NavList className={cn('hidden sm:flex', 'justify-center gap-10')} />
+        {/* Desktop Links */}
+        <div className="hidden md:flex space-x-8">
+          <NavItem href={routes.aboutUs()} label="О нас" pathname={pathname} />
+          <NavItem href={routes.catalog()} label="Каталог" pathname={pathname} />
+          <NavItem href={routes.favorite()} label="Любимые" pathname={pathname} />
+          <NavItem href={routes.contacts()} label="Контакты" pathname={pathname} />
+        </div>
 
-			<ul className={'flex justify-center items-center gap-5'}>
-				<li className={'flex justify-center items-center'}>
-					<Link href={routes.cart()}>
-						<BsBasket3 />
-					</Link>
-				</li>
-				<li>
-					<Link
-						href={routes.me()}
-						className={'flex justify-center items-center gap-1'}
-					>
-						<BsPersonCircle />
-					</Link>
-				</li>
-				<li>
-					{userEmail ? (
-						<span className='font-semibold text-green-700'>{userEmail}</span>
-					) : (
-						<Link href={routes.authLogin()}>Войти/Зарегистрироваться</Link>
-					)}
-				</li>
+        {/* Right Side */}
+        <div className="flex items-center space-x-4">
+          {/* Cart */}
+          <Link
+            href={routes.cart()}
+            className="p-2 rounded-md text-gray-600 hover:text-green-700 hover:bg-gray-100 transition"
+          >
+            <BsBasket3 size={24} />
+          </Link>
 
-				<li className={cn('sm:hidden', 'flex justify-center items-center')}>
-					<button onClick={toggleShowNav}>
-						<AiOutlineMenu />
-					</button>
-				</li>
-			</ul>
-			<MobileNav show={showMobileNav} />
-		</nav>
-	)
+          {/* Profile / Login */}
+          <Link
+            href={userEmail ? routes.me() : routes.authLogin()}
+            className="flex items-center space-x-1 p-2 rounded-md hover:bg-gray-100 transition"
+          >
+            <BsPersonCircle size={24} className="text-gray-600 hover:text-green-700" />
+            {userEmail && (
+              <span className="hidden lg:inline text-green-700 font-medium truncate max-w-xs">
+                {userEmail}
+              </span>
+            )}
+            {!userEmail && (
+              <span className="hidden lg:inline text-gray-700 hover:text-green-700 font-medium">
+                Войти / Регистрация
+              </span>
+            )}
+          </Link>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            className="md:hidden p-2 rounded-md text-gray-600 hover:text-green-700 hover:bg-gray-100 transition"
+            aria-label="Toggle navigation"
+          >
+            {mobileOpen ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Nav */}
+      <MobileNav show={mobileOpen} pathname={pathname} userEmail={userEmail} onClose={() => setMobileOpen(false)} />
+    </nav>
+  )
 }
 
-function MobileNav({ show }: { show: boolean }) {
-	return (
-		<NavList
-			className={cn(
-				'p-5',
-				'absolute top-14 bg-[#cddf95] w-1/3 h-[calc(100vh-3.5rem)]',
-				'transition-all duration-300 ease-out -right-1/3',
-				{
-					'right-0 sm:hidden': show
-				}
-			)}
-		/>
-	)
+function NavItem({
+  href,
+  label,
+  pathname,
+}: {
+  href: string
+  label: string
+  pathname: string
+}) {
+  const isActive = pathname === href || pathname.startsWith(href + '/')
+  return (
+    <Link
+      href={href}
+      className={cn(
+        'relative px-3 py-2 font-medium transition',
+        isActive
+          ? 'text-green-800'
+          : 'text-gray-700 hover:text-green-700'
+      )}
+    >
+      {label}
+      {isActive && (
+        <span className="absolute -bottom-1 left-1/2 w-6 h-1 bg-yellow-400 rounded-full transform -translate-x-1/2"></span>
+      )}
+    </Link>
+  )
 }
 
-function NavList({ className }: { className?: string }) {
-	return (
-		<ul className={className}>
-			<li>
-				<Link href={routes.aboutUs()}>О нас</Link>
-			</li>
-			<li>
-				<Link href={routes.catalog()}>Каталог</Link>
-			</li>
-			<li>
-				<Link href={routes.favorite()}>Любимые</Link>
-			</li>
-			<li>
-				<Link href={routes.contacts()}>Контакты</Link>
-			</li>
-		</ul>
-	)
+function MobileNav({
+  show,
+  pathname,
+  onClose,
+  userEmail,
+}: {
+  show: boolean
+  pathname: string
+  onClose: () => void
+  userEmail: string
+}) {
+  return (
+    <div
+      className={cn(
+        'fixed inset-0 bg-black bg-opacity-40 z-40 transition-opacity',
+        show ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      )}
+      onClick={onClose}
+    >
+      <div
+        className={cn(
+          'absolute top-0 right-0 w-64 h-full bg-white p-6 space-y-6 shadow-xl transition-transform',
+          show ? 'translate-x-0' : 'translate-x-full'
+        )}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <NavItem href={routes.aboutUs()} label="О нас" pathname={pathname} />
+        <NavItem href={routes.catalog()} label="Каталог" pathname={pathname} />
+        <NavItem href={routes.favorite()} label="Любимые" pathname={pathname} />
+        <NavItem href={routes.contacts()} label="Контакты" pathname={pathname} />
+        <NavItem href={routes.cart()} label="Корзина" pathname={pathname} />
+        <NavItem
+          href={userEmail ? routes.me() : routes.authLogin()}
+          label={userEmail ? 'Мой профиль' : 'Войти / Регистрация'}
+          pathname={pathname}
+        />
+      </div>
+    </div>
+  )
 }

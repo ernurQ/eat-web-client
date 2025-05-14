@@ -1,11 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
 import { cn } from '@/shared/lib/classnames'
 import { Product } from '@/entities/products'
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
-import ProductModal from './ProductModal'
 
 type Props = {
 	product: Product
@@ -17,7 +15,6 @@ type PriceProps = {
 }
 
 export function ProductsListItem({ product }: Props) {
-	const [isModalOpen, setIsModalOpen] = useState(false)
 
 	return (
 		<>
@@ -26,7 +23,6 @@ export function ProductsListItem({ product }: Props) {
 			>
 				<div>
 					<button
-						onClick={() => setIsModalOpen(true)}
 						className={'relative h-48 w-48 block flex-shrink mx-auto'}
 					>
 						<Image
@@ -46,14 +42,12 @@ export function ProductsListItem({ product }: Props) {
 					<div className={'flex mt-2 justify-between text-base items-start'}>
 						<div className={'flex flex-wrap items-center gap-x-2'}>
 							<button
-								onClick={() => setIsModalOpen(true)}
 								className={'font-medium'}
 							>
 								{product.name}
 							</button>
 							<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
 							<button
-								onClick={() => setIsModalOpen(true)}
 								className={'text-[#228536]'}
 							>
 								{product.department.name}
@@ -69,7 +63,6 @@ export function ProductsListItem({ product }: Props) {
 
 				<div className={'flex flex-wrap justify-between mt-2'}>
 					<button
-						onClick={() => setIsModalOpen(true)}
 						className={
 							'bg-[#F7C04F] h-11 w-24 flex justify-center items-center rounded text-white hover:bg-[#ba903c] transition-colors ease-in-out duration-300'
 						}
@@ -82,13 +75,6 @@ export function ProductsListItem({ product }: Props) {
 					/>
 				</div>
 			</li>
-
-			{isModalOpen && (
-				<ProductModal
-					product={product}
-					onClose={() => setIsModalOpen(false)}
-				/>
-			)}
 		</>
 	)
 }
