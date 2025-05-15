@@ -12,16 +12,15 @@ type Props = {
 
 export function ProductsList({ isPending, products, className }: Props) {
 	if (isPending) {
-	  // still loading
 	  return <Skeleton className={className} />;
 	}
+	console.log(products);
   
 	if (!products) {
 	  throw new Error('products prop is undefined');
 	}
   
 	if (products.length === 0) {
-	  // no items at all
 	  return (
 		<p className={cn('w-full text-center py-10 text-gray-500', className)}>
 		  Нет товаров для отображения

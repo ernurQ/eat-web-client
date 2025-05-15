@@ -97,12 +97,6 @@ export default function LoginPage() {
             Войти
           </button>
         </form>
-
-        {/* Divider & Social Login */}
-        <div className="flex items-center justify-center my-4">
-          <span className="text-sm text-gray-500">Или войдите через</span>
-        </div>
-        {/* Replace with your social login buttons */}
       </div>
     </div>
   );

@@ -80,7 +80,7 @@ export default function ProductModalEdit({
           <h2 className="text-xl font-bold">Редактировать продукт</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-800"
+            className="bg-red-500 rounded-full text-white px-2 text-gray-500 hover:text-gray-800"
             aria-label="Закрыть"
           >
             &times;

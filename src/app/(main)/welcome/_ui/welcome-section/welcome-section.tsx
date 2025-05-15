@@ -3,10 +3,11 @@ import Link from 'next/link'
 
 import { routes } from '@/shared/config/routes'
 
-import bunImage from './bun.webp'
-import cookie1Image from './cookie1.webp'
-import cookie2Image from './cookie2.webp'
-import cookie3Image from './cookie3.webp'
+import bunImage from './bun.png'
+import cookie1Image from './cookie1.png'
+import cookie2Image from './cookie2.png'
+import cookie3Image from './cookie3.png'
+import cookie4Image from './cookie4.png'
 
 export function WelcomeSection() {
 	return (
@@ -16,7 +17,7 @@ export function WelcomeSection() {
 				alt={'bun'}
 				priority
 				className={
-					'block ml-auto float-end mb-5 md:mb-10 md:ml-10 xl:mb-0 xl:mt-5'
+					'w-[400px] block ml-auto float-end mb-5 md:mb-10 md:ml-10 xl:mb-0 xl:mt-0'
 				}
 			/>
 
@@ -47,26 +48,32 @@ export function WelcomeSection() {
 
 			<div
 				className={
-					'mt-5 flex justify-around gap-5 clear-both xl:clear-none xl:px-32 2xl:px-56'
+					'mt-14 flex justify-around gap-5 clear-both xl:clear-none xl:px-32 2xl:px-16 2xl:gap-0'
 				}
 			>
 				<Image
 					src={cookie1Image}
 					alt={'cookie'}
 					height={135}
-					width={115}
+					width={155}
 				/>
 				<Image
 					src={cookie2Image}
 					alt={'cookie'}
 					height={135}
-					width={115}
+					width={155}
 				/>
 				<Image
 					src={cookie3Image}
 					alt={'cookie'}
 					height={135}
-					width={115}
+					width={155}
+				/>
+				<Image
+					src={cookie4Image}
+					alt={'cookie'}
+					height={135}
+					width={155}
 				/>
 			</div>
 		</section>

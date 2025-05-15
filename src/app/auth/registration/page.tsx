@@ -188,7 +188,7 @@ export default function RegisterPage() {
 								htmlFor='file'
 								className='flex justify-center items-center border py-2 px-4 rounded-md cursor-pointer hover:bg-gray-100 transition'
 							>
-								Загрузить документ (по желанию)
+								Загрузить документ
 							</label>
 							<input
 								id='file'
@@ -270,12 +270,6 @@ export default function RegisterPage() {
 						</button>
 					</form>
 				)}
-
-				<div className='flex items-center justify-center my-4'>
-					<span className='text-sm text-gray-500'>
-						Или зарегистрируйтесь через
-					</span>
-				</div>
 			</div>
 		</div>
 	)
