@@ -12,3 +12,8 @@ export default function MainLayout({ children }: PropsWithChildren) {
 		</>
 	)
 }
+
+<script
+    src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU"
+    defer
+/>

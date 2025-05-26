@@ -44,6 +44,7 @@ export function Navbar() {
           <NavItem href={routes.catalog()} label="Каталог" pathname={pathname} />
           <NavItem href={routes.favorite()} label="Любимые" pathname={pathname} />
           <NavItem href={routes.contacts()} label="Контакты" pathname={pathname} />
+          <NavItem href={routes.news()} label="Новости" pathname={pathname} />
         </div>
 
         {/* Right Side */}
@@ -149,6 +150,7 @@ function MobileNav({
         <NavItem href={routes.catalog()} label="Каталог" pathname={pathname} />
         <NavItem href={routes.favorite()} label="Любимые" pathname={pathname} />
         <NavItem href={routes.contacts()} label="Контакты" pathname={pathname} />
+        <NavItem href={routes.news()} label="Новости" pathname={pathname} />
         <NavItem href={routes.cart()} label="Корзина" pathname={pathname} />
         <NavItem
           href={userEmail ? routes.me() : routes.authLogin()}

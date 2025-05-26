@@ -5,6 +5,7 @@ export const routes = {
 	catalog: () => '/catalog',
 	favorite: () => '/favorites',
 	contacts: () => '/contacts',
+	news: () => '/news',
 	me: () => '/me',
 
 	orders: () => '/owner/orders',
