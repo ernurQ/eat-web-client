@@ -83,7 +83,7 @@ export function UsersTable() {
 			dataIndex: usersRoleKey,
 			key: usersRoleKey,
 			filterMultiple: false,
-			filteredValue: role && [role],
+			defaultFilteredValue: role && [role],
 			filters: [
 				{
 					text: 'Пользователь',

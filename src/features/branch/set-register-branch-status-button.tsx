@@ -20,7 +20,7 @@ export function SetRegisterBranchStatusButton({ variant }: Props) {
 				trigger={['click']}
 				onConfirm={confirm}
 			>
-				<Button type={'primary'}>Approve</Button>
+				<Button type={'primary'}>Одобрить</Button>
 			</Popconfirm>
 		)
 	}
@@ -31,7 +31,7 @@ export function SetRegisterBranchStatusButton({ variant }: Props) {
 			trigger={['click']}
 			onConfirm={confirm}
 		>
-			<Button danger>Reject</Button>
+			<Button danger>Отклонить</Button>
 		</Popconfirm>
 	)
 }

@@ -102,7 +102,7 @@ export function RequestsTable() {
 					rel='noopener noreferrer'
 					icon={<DownloadOutlined />}
 				>
-					Download
+					Скачать
 				</Button>
 			)
 		},
