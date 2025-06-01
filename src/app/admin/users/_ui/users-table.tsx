@@ -1,5 +1,6 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { Table, TableColumnsType } from 'antd'
 import { useSearchParams } from 'next/navigation'
 
@@ -7,7 +8,7 @@ import { ErrorComponent } from '@/shared/lib/ant-design/error-component'
 import { useGetTableColumnSearchProps } from '@/shared/lib/ant-design/get-table-column-searchProps'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
 
-import { UserRole, useGetUsersQuery } from '@/entities/users'
+import { UserRole, usersQueryOptions } from '@/entities/users'
 
 import { ChangeUserRoleButton } from '@/features/users/change-user-role-button'
 
@@ -23,6 +24,10 @@ type DataType = {
 	[usersNameKey]: string
 	[usersSurnameKey]: string
 	[usersRoleKey]: UserRole
+	[usersChangeRoleKey]: {
+		id: string
+		currentRole: UserRole
+	}
 }
 
 export function UsersTable() {
@@ -40,12 +45,15 @@ export function UsersTable() {
 			? roleParam
 			: undefined
 
-	const { data, isPending, isError, error } = useGetUsersQuery({
-		page,
-		name,
-		surname,
-		role
-	})
+	const { data, isPending, isError, error } = useQuery(
+		usersQueryOptions({
+			page,
+			size: usersPageSize,
+			name,
+			surname,
+			role
+		})
+	)
 
 	const handleSearch = (key: string, value: string) => {
 		setSearchParam({ [key]: value })
@@ -102,7 +110,12 @@ export function UsersTable() {
 		{
 			dataIndex: usersChangeRoleKey,
 			key: usersChangeRoleKey,
-			render: (id) => <ChangeUserRoleButton userId={id} />,
+			render: ({ id, currentRole }) => (
+				<ChangeUserRoleButton
+					userId={id}
+					currentRole={currentRole}
+				/>
+			),
 			align: 'center'
 		}
 	]
@@ -118,12 +131,12 @@ export function UsersTable() {
 			dataSource={
 				isPending
 					? []
-					: data.content.map(({ id, name, surname, role }) => ({
-							key: id,
-							[usersNameKey]: name,
-							[usersSurnameKey]: surname,
-							[usersRoleKey]: role,
-							[usersChangeRoleKey]: id
+					: data.users.map(({ ID, Name, Surname, Role }) => ({
+							key: ID,
+							[usersNameKey]: Name,
+							[usersSurnameKey]: Surname,
+							[usersRoleKey]: Role,
+							[usersChangeRoleKey]: { id: ID, currentRole: Role }
 						}))
 			}
 			locale={{
@@ -132,7 +145,7 @@ export function UsersTable() {
 			pagination={{
 				position: ['bottomCenter'],
 				current: page,
-				total: data?.totalElements,
+				total: data?.total,
 				pageSize: usersPageSize
 			}}
 			onChange={(pagination, filters) => {

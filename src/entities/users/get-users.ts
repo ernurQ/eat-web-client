@@ -1,52 +1,49 @@
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
+
+import { api, queryClient } from '@/shared/api'
 
 export type UserRole = 'customer' | 'seller' | 'admin'
 
 type Data = {
 	page: number
+	size: number
 	name?: string
 	surname?: string
 	role?: UserRole
 }
 
 type ResponseData = {
-	content: Array<{
-		id: string
-		name: string
-		surname: string
-		role: UserRole
-	}>
-	totalElements: number
+	users: Array<{
+		ID: string
+		Name: string
+		Surname: string
+		Email: string
+		Role: 'customer' | 'seller' | 'admin'
+	}> | null
+	total: number
 }
 
-export function useGetUsersQuery({ page, name, surname, role }: Data) {
-	return useQuery({
-		queryKey: ['users', { page, name, surname, role }],
+export function usersQueryOptions(data: Data) {
+	const { page, size, name, role } = data
+	return queryOptions({
+		queryKey: ['users', { page, size, name, role }],
 		queryFn: () =>
-			new Promise<ResponseData>((resolve) =>
-				resolve({
-					content: [
-						{
-							id: '1',
-							name: 'John',
-							surname: 'Doe',
-							role: 'admin'
-						},
-						{
-							id: '2',
-							name: 'Alice',
-							surname: 'Smith',
-							role: 'seller'
-						},
-						{
-							id: '3',
-							name: 'Bob',
-							surname: 'Johnson',
-							role: 'customer'
-						}
-					],
-					totalElements: 3
+			api
+				.get<ResponseData>('/auth/admin/users', {
+					params: {
+						Page: page,
+						Limit: size,
+						Role: role,
+						Search: name
+					}
 				})
-			)
+				.then((res) => res.data)
+				.then(({ users, total }) => ({ users: users || [], total }))
+	})
+}
+
+export async function invalidateUsersQuery() {
+	await queryClient.invalidateQueries({
+		queryKey: ['users']
 	})
 }

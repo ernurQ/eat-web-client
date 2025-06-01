@@ -1,6 +1,7 @@
 'use client'
 
 import { DownloadOutlined } from '@ant-design/icons'
+import { useQuery } from '@tanstack/react-query'
 import { Button, Table, TableColumnsType } from 'antd'
 import { useSearchParams } from 'next/navigation'
 
@@ -8,7 +9,7 @@ import { ErrorComponent } from '@/shared/lib/ant-design/error-component'
 import { useGetTableColumnSearchProps } from '@/shared/lib/ant-design/get-table-column-searchProps'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
 
-import { useGetRegisterBranchRequestsQuery } from '@/entities/branch'
+import { registerBranchRequestsQueryOptions } from '@/entities/branch'
 
 import { BranchRequestActionsDropdown } from '@/app/admin/register-branch-requests/_ui/branch-request-actions-dropdown'
 
@@ -38,13 +39,14 @@ export function RequestsTable() {
 	const bin = searchParams.get(branchRequestsBinKey) || undefined
 	const address = searchParams.get(branchRequestsAddressKey) || undefined
 
-	const { data, isPending, isError, error } = useGetRegisterBranchRequestsQuery(
-		{
+	const { data, isPending, isError, error } = useQuery(
+		registerBranchRequestsQueryOptions({
 			page,
+			size: branchRequestsPageSize,
 			name,
 			bin,
 			address
-		}
+		})
 	)
 
 	const handleSearch = (key: string, value: string) => {
@@ -125,14 +127,16 @@ export function RequestsTable() {
 			dataSource={
 				isPending
 					? []
-					: data.content.map(({ id, name, bin, address, documentUrl }) => ({
-							key: id,
-							[branchRequestsNameKey]: name,
-							[branchRequestsBinKey]: bin,
-							[branchRequestsAddressKey]: address,
-							[branchRequestsDocumentKey]: documentUrl,
-							[branchRequestsActionsKey]: id
-						}))
+					: data.sellers.map(
+							({ ID, CompanyName, BIN, Location, Document }) => ({
+								key: ID,
+								[branchRequestsNameKey]: CompanyName,
+								[branchRequestsBinKey]: BIN,
+								[branchRequestsAddressKey]: Location,
+								[branchRequestsDocumentKey]: Document,
+								[branchRequestsActionsKey]: ID
+							})
+						)
 			}
 			locale={{
 				emptyText: isPending ? '' : 'Нет данных'
@@ -140,7 +144,7 @@ export function RequestsTable() {
 			pagination={{
 				position: ['bottomCenter'],
 				current: page,
-				total: data?.totalElements,
+				total: data?.total,
 				pageSize: branchRequestsPageSize,
 				onChange: (page) =>
 					setSearchParam({ [branchRequestsPageKey]: page.toString() })

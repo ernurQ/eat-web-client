@@ -2,21 +2,34 @@
 
 import { Button, Popconfirm } from 'antd'
 
+import {
+	invalidateRegisterBranchRequestsQuery,
+	rejectBranchRequest
+} from '@/entities/branch'
+import { approveBranchRequest } from '@/entities/branch/approve-branch-requests'
+
 type Props = {
 	variant: 'approve' | 'reject'
 	branchId: string
 }
 
-export function SetRegisterBranchStatusButton({ variant }: Props) {
-	const confirm = () =>
-		new Promise((resolve) => {
-			setTimeout(() => resolve(null), 3000)
-		})
+export function SetRegisterBranchStatusButton({ variant, branchId }: Props) {
+	async function confirm() {
+		if (variant === 'approve') {
+			await approveBranchRequest({ id: branchId })
+			await invalidateRegisterBranchRequestsQuery()
+		}
+
+		if (variant === 'reject') {
+			await rejectBranchRequest({ id: branchId })
+			await invalidateRegisterBranchRequestsQuery()
+		}
+	}
 
 	if (variant === 'approve') {
 		return (
 			<Popconfirm
-				title={'Are you sure to approve this branch?'}
+				title={'Вы уверены, что одобрите эту компанию?'}
 				trigger={['click']}
 				onConfirm={confirm}
 			>
@@ -27,7 +40,7 @@ export function SetRegisterBranchStatusButton({ variant }: Props) {
 
 	return (
 		<Popconfirm
-			title={'Are you sure to reject this branch?'}
+			title={'Вы уверены, что откажете от этой компании?'}
 			trigger={['click']}
 			onConfirm={confirm}
 		>
