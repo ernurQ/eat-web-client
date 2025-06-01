@@ -17,8 +17,8 @@ export function AntDesignProvider({ children }: PropsWithChildren) {
 							headerBg: 'white'
 						},
 						Menu: {
-							colorItemBgSelected: 'rgb(205, 223, 149)',
-							colorItemTextSelected: 'black',
+							itemSelectedBg: 'rgb(205, 223, 149)',
+							itemSelectedColor: 'black',
 							itemBg: '#f6ffed'
 						}
 					}

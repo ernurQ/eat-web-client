@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { queryClient } from '@/app/api/query-client'
+import { queryClient } from '@/shared/api'
 
 import { cartApi } from '@/entities/cart/cart-api'
 

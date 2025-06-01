@@ -11,9 +11,18 @@ export const routes = {
 	companyProducts: () => '/owner/products',
 	companyAccount: () => '/owner/account',
 
-	authLogin: () => '/auth/login',
-	authReg: () => '/auth/registration',
+	auth: {
+		loginUser: () => '/auth/login',
+
+		registerUser: () => '/auth/registration/user',
+		registerBranch: () => '/auth/registration/branch'
+	},
 
 	product: (id: string) => `/products/${id}`,
-	department: (id: string) => `/departments/${id}`
+	department: (id: string) => `/departments/${id}`,
+
+	admin: {
+		registerBranchRequests: () => '/admin/register-branch-requests',
+		users: () => '/admin/users'
+	}
 }
