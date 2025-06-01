@@ -20,7 +20,7 @@ export function registerBranchOptions() {
 		mutationFn: ({
 			name,
 			bin,
-			phoneNumber: string,
+			phoneNumber,
 			companyName,
 			email,
 			password,
@@ -28,16 +28,24 @@ export function registerBranchOptions() {
 			document
 		}) =>
 			api
-				.post<ResponseData>('/auth/sellers/register ', {
-					name,
-					bin,
-					phoneNumber: string,
-					companyName,
-					email,
-					password,
-					location,
-					document
-				})
+				.post<ResponseData>(
+					'/auth/sellers/register ',
+					{
+						name,
+						bin,
+						phoneNumber,
+						companyName,
+						email,
+						password,
+						location,
+						document
+					},
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					}
+				)
 				.then((res) => res.data)
 	} satisfies MutationOptions<ResponseData, ApiError, Data>
 }
