@@ -54,10 +54,10 @@ export function ProductsListItem({ product }: Props) {
           <button
             onClick={() => setIsModalOpen(true)} // Open modal on click
             className={
-              'bg-[#F7C04F] h-11 w-24 flex justify-center items-center rounded text-white hover:bg-[#ba903c] transition-colors ease-in-out duration-300'
+              'text-sm outline-none bg-[#F7C04F] h-11 w-24 flex justify-center items-center rounded text-white hover:bg-[#ba903c] transition-colors ease-in-out duration-300'
             }
           >
-            Купить
+            Добавить в корзину
           </button>
           <Price price={product.price} discountedPrice={product.discountedPrice ?? 0} />
         </div>

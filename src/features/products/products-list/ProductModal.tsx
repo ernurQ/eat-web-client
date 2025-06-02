@@ -1,3 +1,4 @@
+// components/ProductModal.tsx
 'use client'
 
 import React, {
@@ -5,16 +6,18 @@ import React, {
   useState,
   useMemo,
   useCallback,
-  useRef,
   KeyboardEvent
 } from 'react'
 import Image from 'next/image'
-import L from 'leaflet'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
+import dynamic from 'next/dynamic'
 import Swal from 'sweetalert2'
 import { useQueryClient } from '@tanstack/react-query'
 import { Product } from '@/entities/products'
+
+// Dynamically import LeafletMap with ssr: false 
+const LeafletMap = dynamic(() => import('@/features/products/products-list/LeafletMap'), {
+  ssr: false
+})
 
 interface CartItem {
   id: string
@@ -33,11 +36,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   const queryClient = useQueryClient()
   const [quantity, setQuantity] = useState(0)
 
-  // localStorage helpers
-  const getCart = useCallback(() => {
-    if (typeof window === 'undefined') return [] as CartItem[]
+  // Helper to read/write cart from localStorage
+  const getCart = useCallback((): CartItem[] => {
+    if (typeof window === 'undefined') return []
     try {
-      return JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
+      return JSON.parse(localStorage.getItem('cart') || '[]')
     } catch {
       return []
     }
@@ -52,23 +55,25 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     [queryClient]
   )
 
-  // load initial
+  // Load initial quantity if already in cart
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const existing = getCart().find(i => i.id === product.id)
+    const existing = getCart().find((i) => i.id === product.id)
     if (existing) setQuantity(existing.quantity)
   }, [getCart, product.id])
 
-  // close on ESC
+  // Close on Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
     document.addEventListener('keydown', handler)
-    return () => document.removeEventListener('keydown', handler)
+    return () => {
+      document.removeEventListener('keydown', handler)
+    }
   }, [onClose])
 
-  // cart actions
+  // Cart actions
   const handleFirstAdd = () => {
     if (quantity > 0) return
     const cart = getCart()
@@ -82,12 +87,13 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     updateCart(cart)
     setQuantity(1)
   }
+
   const handleIncrement = () => {
     if (quantity >= product.maxQuantity) return
     const cart = getCart()
-    const idx = cart.findIndex(i => i.id === product.id)
+    const idx = cart.findIndex((i) => i.id === product.id)
     if (idx >= 0) {
-      cart[idx].quantity++
+      cart[idx].quantity += 1
       setQuantity(cart[idx].quantity)
     } else {
       cart.push({
@@ -101,12 +107,13 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     }
     updateCart(cart)
   }
+
   const handleDecrement = () => {
     const cart = getCart()
-    const idx = cart.findIndex(i => i.id === product.id)
+    const idx = cart.findIndex((i) => i.id === product.id)
     if (idx < 0) return
     if (cart[idx].quantity > 1) {
-      cart[idx].quantity--
+      cart[idx].quantity -= 1
       setQuantity(cart[idx].quantity)
     } else {
       cart.splice(idx, 1)
@@ -114,6 +121,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     }
     updateCart(cart)
   }
+
   const handleFinal = () => {
     Swal.fire({
       icon: 'success',
@@ -124,27 +132,30 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     onClose()
   }
 
-  // formatters
+  // Format expiration date
   const formattedDate = useMemo(() => {
     try {
       return new Date(product.expirationDate).toLocaleDateString('ru-RU', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
       })
     } catch {
       return product.expirationDate
     }
   }, [product.expirationDate])
 
+  // Compute total price
   const totalPrice = useMemo(() => {
     return (
-      ((product.discountedPrice ?? product.price) * quantity)
-        .toLocaleString('ru-RU') + ' ₸'
+      ((product.discountedPrice ?? product.price) * quantity).toLocaleString('ru-RU') +
+      ' ₸'
     )
   }, [product.discountedPrice, product.price, quantity])
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-lg overflow-y-auto max-h-[90vh] w-full max-w-5xl flex flex-col relative">
+      <div className="bg-white rounded-lg shadow-lg overflow-y-auto max-h-[90vh] w-full max-w-5xl flex flex-col">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl"
@@ -154,7 +165,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         </button>
 
         <div className="flex flex-col md:flex-row">
-          {/* Left: image + info */}
+          {/* Left: product image & details */}
           <div className="md:w-1/2 p-6 space-y-6">
             <div className="relative w-full h-64">
               <Image
@@ -200,7 +211,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                     onClick={handleFinal}
                     className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded"
                   >
-                    Оплатить
+                    Добавить
                   </button>
                 </div>
               )}
@@ -213,46 +224,17 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             </div>
           </div>
 
-          {/* Right: Map */}
-          <div className="md:w-1/2 p-6 h-96">
-            <CustomMap product={product} />
+          {/* Right: only the Leaflet map (wrapped in a client‐only component) */}
+          <div className="md:w-1/2 h-96 p-4">
+            <LeafletMap
+              lat={product.location.lat}
+              lng={product.location.lng}
+              logoUrl={product.department.logo}
+              companyName={product.department.name}
+            />
           </div>
         </div>
       </div>
     </div>
-  )
-}
-
-// --- Map component (named export) ---
-interface CustomMapProps {
-  product: Product
-}
-
-export function CustomMap({ product }: CustomMapProps) {
-  const companyIcon = useMemo(
-    () =>
-      L.icon({
-        iconUrl: product.department.logo,
-        iconSize:    [48, 48],
-        iconAnchor:  [24, 48],
-        popupAnchor: [0, -48],
-      }),
-    [product.department.logo]
-  )
-
-  return (
-    <MapContainer
-      center={[product.location.lat, product.location.lng]}
-      zoom={13}
-      style={{ width: '100%', height: '175%' }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <Marker
-        position={[product.location.lat, product.location.lng]}
-        icon={companyIcon}
-      >
-        <Popup>{product.department.name}</Popup>
-      </Marker>
-    </MapContainer>
   )
 }

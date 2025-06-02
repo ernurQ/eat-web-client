@@ -44,7 +44,7 @@ export function Navbar() {
           <NavItem href={routes.catalog()} label="Каталог" pathname={pathname} />
           <NavItem href={routes.favorite()} label="Любимые" pathname={pathname} />
           <NavItem href={routes.contacts()} label="Контакты" pathname={pathname} />
-          <NavItem href={routes.news()} label="Новости" pathname={pathname} />
+          {/* <NavItem href={routes.news()} label="Новости" pathname={pathname} /> */}
         </div>
 
         {/* Right Side */}
@@ -58,11 +58,14 @@ export function Navbar() {
           </Link>
 
           {/* Profile / Login */}
+          <Link href={userEmail ? routes.me() : routes.authLogin()}>
+           <BsPersonCircle size={24} className="text-gray-600 hover:text-green-700" />
+          </Link>
+         
           <Link
             href={userEmail ? routes.me() : routes.authLogin()}
             className="flex items-center space-x-1 p-2 rounded-md hover:bg-gray-100 transition"
           >
-            <BsPersonCircle size={24} className="text-gray-600 hover:text-green-700" />
             {userEmail && (
               <span className="hidden lg:inline text-green-700 font-medium truncate max-w-xs">
                 {userEmail}

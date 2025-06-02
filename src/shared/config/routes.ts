@@ -7,7 +7,6 @@ export const routes = {
 	contacts: () => '/contacts',
 	news: () => '/news',
 	me: () => '/me',
-
 	orders: () => '/owner/orders',
 	companyProducts: () => '/owner/products',
 	companyAccount: () => '/owner/account',
