@@ -26,7 +26,6 @@ export function AdminSider({ children }: PropsWithChildren) {
 				style={{ paddingTop: 20 }}
 			>
 				<Menu
-					theme='dark'
 					selectedKeys={[currentKey]}
 					mode='inline'
 					items={menuItems}
@@ -34,7 +33,7 @@ export function AdminSider({ children }: PropsWithChildren) {
 			</Sider>
 
 			<Layout>
-				<Header style={{ padding: 0, background: 'white' }}>
+				<Header style={{ padding: 0 }}>
 					<Button
 						type='text'
 						icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}

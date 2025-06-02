@@ -4,16 +4,28 @@ import { EllipsisOutlined } from '@ant-design/icons'
 import { Button, Flex, Popconfirm, Popover } from 'antd'
 import React from 'react'
 
-import { UserRole } from '@/entities/users'
+import {
+	UserRole,
+	downgradeUserToCustomer,
+	invalidateUsersQuery,
+	upgradeUserToAdmin
+} from '@/entities/users'
 
 type Props = {
 	userId: string
+	currentRole: 'customer' | 'admin'
 }
 
-export function ChangeUserRoleButton({}: Props) {
+export function ChangeUserRoleButton({ userId, currentRole }: Props) {
 	const changeUserRole = async (role: UserRole) => {
-		await new Promise((resolve) => setTimeout(resolve, 1000))
-		console.log(role)
+		if (role === 'admin') {
+			await upgradeUserToAdmin({ id: userId })
+			await invalidateUsersQuery()
+		}
+		if (role === 'customer') {
+			await downgradeUserToCustomer({ id: userId })
+			await invalidateUsersQuery()
+		}
 	}
 
 	const renderRoleButton = (role: UserRole, label: string) => (
@@ -35,15 +47,15 @@ export function ChangeUserRoleButton({}: Props) {
 			vertical
 			gap={10}
 		>
-			{renderRoleButton('customer', 'Customer')}
-			{renderRoleButton('admin', 'Admin')}
+			{currentRole === 'admin' && renderRoleButton('customer', 'Пользователь')}
+			{currentRole === 'customer' && renderRoleButton('admin', 'Админ')}
 		</Flex>
 	)
 
 	return (
 		<Popover
 			content={content}
-			title='Change Role'
+			title='Изменить роль'
 			trigger='click'
 		>
 			<Button icon={<EllipsisOutlined />} />

@@ -4,7 +4,7 @@ export const mockProducts: ProductFullData[] = [
 	{
 		id: '1',
 		name: 'Круассан',
-		department: { id: '101', name: 'CoffeBoom', logo: '/images/companyLogos/coffeBoom.png' },
+		department: { id: '101', name: 'CoffeBoom Mangilik El', logo: '/images/companyLogos/coffeBoom.png' },
 		price: 1000,
 		discountedPrice: 350,
 		isFavorite: true,
@@ -26,7 +26,7 @@ export const mockProducts: ProductFullData[] = [
 	{
 		id: '2',
 		name: 'Сочник с творогом',
-		department: { id: '102', name: 'CoffeBoom', logo: '/images/companyLogos/coffeBoom.png' },
+		department: { id: '102', name: 'CoffeBoom Mega', logo: '/images/companyLogos/coffeBoom.png' },
 		price: 1000,
 		discountedPrice: 400,
 		thumbnail: '/images/catalogProducts/curdpastries.jpg',
@@ -48,7 +48,7 @@ export const mockProducts: ProductFullData[] = [
 	{
 		id: '3',
 		name: 'Ватрушка с творогом',
-		department: { id: '103', name: 'Mio Mar', logo: '/images/companyLogos/mioMar.png' },
+		department: { id: '103', name: 'Mio Mar Orbita', logo: '/images/companyLogos/mioMar.png' },
 		price: 800,
 		discountedPrice: 300,
 		thumbnail: '/images/catalogProducts/cheeseBun.jpg',

@@ -7,13 +7,24 @@ export const routes = {
 	contacts: () => '/contacts',
 	news: () => '/news',
 	me: () => '/me',
+	companyProfile: (id: string) => `/company/${id}`,
+	companyProducts: (id: string) => `/company/${id}/products`,
+	companyReviews: (id: string) => `/company/${id}/reviews`,
 	orders: () => '/owner/orders',
-	companyProducts: () => '/owner/products',
-	companyAccount: () => '/owner/account',
+	ownerProducts: () => '/owner/products',
+	ownerAccount: () => '/owner/account',
+	auth: {
+		loginUser: () => '/auth/login',
 
-	authLogin: () => '/auth/login',
-	authReg: () => '/auth/registration',
+		registerUser: () => '/auth/registration/user',
+		registerBranch: () => '/auth/registration/branch'
+	},
 
 	product: (id: string) => `/products/${id}`,
-	department: (id: string) => `/departments/${id}`
+	department: (id: string) => `/departments/${id}`,
+
+	admin: {
+		registerBranchRequests: () => '/admin/register-branch-requests',
+		users: () => '/admin/users'
+	}
 }

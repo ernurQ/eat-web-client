@@ -8,9 +8,10 @@ type Props = {
 	products?: Product[]
 	isPending: boolean
 	className?: string
+	gridColNum?: number
 }
 
-export function ProductsList({ isPending, products, className }: Props) {
+export function ProductsList({ isPending, products, className, gridColNum=6, }: Props) {
 	if (isPending) return <Skeleton className={className} />
 	if (!products) throw Error('products prop is undefined')
 
@@ -18,7 +19,7 @@ export function ProductsList({ isPending, products, className }: Props) {
 		<ul
 			className={cn(
 				'grid gap-5 w-full',
-				'grid-cols-1 sm:grid-cols-3 xl:grid-cols-6',
+				`grid-cols-1 sm:grid-cols-3 xl:grid-cols-${gridColNum}`,
 				className
 			)}
 		>

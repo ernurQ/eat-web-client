@@ -7,6 +7,8 @@ import { Product } from '@/entities/products'
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
 
 import ProductModal from '@/features/products/products-list/ProductModal'
+import Link from 'next/link'
+import { routes } from '@/shared/config/routes'
 
 type Props = {
   product: Product
@@ -41,9 +43,9 @@ export function ProductsListItem({ product }: Props) {
 
           <div className={'flex mt-2 justify-between text-base items-start'}>
             <div className={'flex flex-wrap items-center gap-x-2'}>
-              <button className={'font-medium'}>{product.name}</button>
+              <span className={'font-medium flex-wrap'}>{product.name}</span>
               <div className={'h-1 w-1 rounded-full bg-[#228536]'} />
-              <button className={'text-[#228536]'}>{product.department.name}</button>
+              <Link href={routes.companyProfile(product.department.id)} className={'text-[#228536]'}>{product.department.name}</Link>
             </div>
 
             <AddToFavoritesButton isFavorite={product.isFavorite} productId={product.id} />

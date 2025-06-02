@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { queryClient } from '@/app/api/query-client'
+import { queryClient } from '@/shared/api'
 import { PaginationParams } from '@/shared/types/pagination.types'
 
 import { productsApi } from '@/entities/products/api/products-api'
