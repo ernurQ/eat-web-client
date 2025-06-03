@@ -7,12 +7,17 @@ export const routes = {
 	contacts: () => '/contacts',
 	news: () => '/news',
 	me: () => '/me',
-	companyProfile: (id: string) => `/company/${id}`,
-	companyProducts: (id: string) => `/company/${id}/products`,
-	companyReviews: (id: string) => `/company/${id}/reviews`,
+
+	branch: {
+		profile: (id: string) => `/branch/${id}`,
+		products: (id: string) => `/branch/${id}/products`,
+		reviews: (id: string) => `/branch/${id}/reviews`
+	},
+
 	orders: () => '/owner/orders',
 	ownerProducts: () => '/owner/products',
 	ownerAccount: () => '/owner/account',
+
 	auth: {
 		loginUser: () => '/auth/login',
 
