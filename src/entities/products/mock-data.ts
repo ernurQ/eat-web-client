@@ -4,7 +4,7 @@ export const mockProducts: ProductFullData[] = [
 	{
 		id: '1',
 		name: 'Круассан',
-		department: { id: '101', name: 'CoffeBoom Mangilik El', logo: '/images/companyLogos/coffeBoom.png' },
+		department: { id: '683d58b675b43bf1d00abc9c', name: 'CoffeBoom Mangilik El', logo: '/images/companyLogos/coffeBoom.png' },
 		price: 1000,
 		discountedPrice: 350,
 		isFavorite: true,

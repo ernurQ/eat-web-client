@@ -97,7 +97,7 @@ export default function ProductAdd() {
 						{/* Close button */}
 						<button
 							onClick={() => setModalOpen(false)}
-							className='absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl leading-none'
+							className='absolute bg-red-500 rounded-full px-1 text-white top-2 right-2 hover:text-gray-800 text-2xl leading-none'
 						>
 							&times;
 						</button>

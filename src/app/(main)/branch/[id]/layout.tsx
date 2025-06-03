@@ -30,7 +30,7 @@ export default function CompanyLayout({ children }: PropsWithChildren) {
 
 	if (isError) {
 		return (
-			<div className='flex justify-center items-center h-screen'>
+			<div className='flex flex-col justify-center items-center h-screen'>
 				<p>Company not found.</p>
 			</div>
 		)
