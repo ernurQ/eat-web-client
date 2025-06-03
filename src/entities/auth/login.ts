@@ -12,7 +12,7 @@ type ResponseData = {
 	user: {
 		token: string
 		user: {
-			Role: 'customer' | 'seller' | 'admin'
+			role: 'customer' | 'seller' | 'admin'
 		}
 	}
 }

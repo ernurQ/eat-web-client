@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
+import { log } from 'console'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -32,8 +33,14 @@ export default function LoginPage() {
 			toast.error('Что-то пошло не так')
 		},
 		onSuccess: (data) => {
-			if (data.user.user.Role === 'admin') {
+			if (data.user.user.role === 'admin') {
 				router.push(routes.admin.registerBranchRequests())
+			}
+			if (data.user.user.role === 'customer') {
+				router.push(routes.catalog())
+			}
+			if (data.user.user.role === 'seller') {
+				router.push(routes.ownerAccount())
 			}
 		}
 	})

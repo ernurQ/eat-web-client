@@ -9,26 +9,17 @@ import { BsBasket3, BsPersonCircle } from 'react-icons/bs'
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 import { EatWebLogo } from '@/shared/ui/eat-web-logo'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/shared/api'
+import { meQueryOptions } from '@/entities/auth'
 
 export function Navbar() {
+
 	const [mobileOpen, setMobileOpen] = useState(false)
 	const [userEmail, setUserEmail] = useState('')
 	const pathname = usePathname()
 
-	useEffect(() => {
-		async function fetchUser() {
-			try {
-				const res = await fetch('/api/user/me', { credentials: 'include' })
-				if (res.ok) {
-					const { user } = await res.json()
-					setUserEmail(user.email || '')
-				}
-			} catch {
-				setUserEmail('')
-			}
-		}
-		fetchUser()
-	}, [])
+	const {data} = useQuery(meQueryOptions())
 
 	return (
 		<nav className='left-0 right-0 bg-white shadow-md z-50'>
@@ -76,22 +67,22 @@ export function Navbar() {
 					</Link>
 
 					{/* Profile / Login */}
-					<Link href={userEmail ? routes.me() : routes.auth.loginUser()}>
+					<Link href={data?.user.name ? routes.me() : routes.auth.loginUser()}>
 						<BsPersonCircle
 							size={24}
 							className='text-gray-600 hover:text-green-700'
 						/>
 					</Link>
 					<Link
-						href={userEmail ? routes.me() : routes.auth.loginUser()}
+						href={data?.user.name ? routes.me() : routes.auth.loginUser()}
 						className='flex items-center space-x-1 p-2 rounded-md hover:bg-gray-100 transition'
 					>
-						{userEmail && (
+						{data && (
 							<span className='hidden lg:inline text-green-700 font-medium truncate max-w-xs'>
-								{userEmail}
+								{data?.user.name}
 							</span>
 						)}
-						{!userEmail && (
+						{!data?.user.name && (
 							<span className='hidden lg:inline text-gray-700 hover:text-green-700 font-medium'>
 								Войти / Регистрация
 							</span>

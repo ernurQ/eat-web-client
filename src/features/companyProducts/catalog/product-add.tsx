@@ -1,23 +1,25 @@
 // components/ProductAdd.tsx
 import Image from 'next/image'
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
 interface KBJU {
 	calories: number
-	protein: number
-	fat: number
-	carbs: number
+	proteins: number
+	fats: number
+	carbohydrates: number
 }
 
 interface ProductForm {
 	imageFile?: File
 	name: string
 	description: string
-	expiryDate: string
+	expirationDate: string
 	composition: string
+	quantity: number
 	kbju: KBJU
-	priceOriginal: string
-	priceDiscounted: string
+	price: number
+	discountPrice: number
+	categoryName: string
 }
 
 export default function ProductAdd() {
@@ -25,40 +27,43 @@ export default function ProductAdd() {
 	const [form, setForm] = useState<ProductForm>({
 		name: '',
 		description: '',
-		expiryDate: '',
+		expirationDate: '',
 		composition: '',
-		kbju: { calories: 0, protein: 0, fat: 0, carbs: 0 },
-		priceOriginal: '',
-		priceDiscounted: ''
+		quantity: 0,
+		kbju: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+		price: 0,
+		discountPrice: 0,
+		categoryName: '',
 	})
-	const discountPercent = Math.round(
-		((Number(form.priceOriginal) - Number(form.priceDiscounted)) /
-			Number(form.priceOriginal)) *
-			100
-	)
+
+	const discountPercent =
+		form.price > 0
+			? Math.round(
+					((form.price - form.discountPrice) / form.price) *
+						100
+				)
+			: 0
+
 	const isValidDiscount = discountPercent > 0 && discountPercent < 100
 	const [imagePreview, setImagePreview] = useState<string>()
-
-	// Type‐guard for KBJU fields
-	const isKBJUKey = (key: string): key is keyof KBJU =>
-		['calories', 'protein', 'fat', 'carbs'].includes(key)
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target
 
-		if (isKBJUKey(name)) {
-			// update nested kbju object
+		// Handle nested KBJU fields
+		if (name.startsWith('kbju.')) {
+			const field = name.split('.')[1] as keyof KBJU
 			setForm((prev) => ({
 				...prev,
 				kbju: {
 					...prev.kbju,
-					[name]: Number(value)
+					[field]: value === '' ? 0 : Number(value)
 				}
 			}))
 		} else {
-			// update top-level string fields
+			// Handle top-level fields
 			const key = name as Exclude<keyof ProductForm, 'kbju' | 'imageFile'>
 			setForm((prev) => ({
 				...prev,
@@ -77,10 +82,28 @@ export default function ProductAdd() {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
+
+		if (!form.name || !form.expirationDate || !form.price) {
+			alert('Please fill all required fields')
+			return
+		}
+
+		if (Number(form.discountPrice) >= Number(form.price)) {
+			alert('Discounted price must be lower than original price')
+			return
+		}
+
 		console.log('Submitting product:', form)
-		// TODO: send `form` and `form.imageFile` to your API
 		setModalOpen(false)
 	}
+
+	useEffect(() => {
+		return () => {
+			if (imagePreview) {
+				URL.revokeObjectURL(imagePreview)
+			}
+		}
+	}, [imagePreview])
 
 	return (
 		<div className='p-4'>
@@ -157,11 +180,22 @@ export default function ProductAdd() {
 								</div>
 
 								<div>
+									<label className='block text-sm mb-1'>Категория</label>
+									<input
+										name='categoryName'
+										value={form.categoryName}
+										onChange={handleChange}
+										className='w-full border rounded px-3 py-2'
+										required
+									/>
+								</div>
+
+								<div>
 									<label className='block text-sm mb-1'>Дата истечения</label>
 									<input
 										name='expiryDate'
 										type='date'
-										value={form.expiryDate}
+										value={form.expirationDate}
 										onChange={handleChange}
 										className='w-full border rounded px-3 py-2'
 										required
@@ -181,10 +215,25 @@ export default function ProductAdd() {
 								</div>
 
 								<div>
+									<label className='block text-sm mb-1'>
+										Количество (обязательно)
+									</label>
+									<input
+										type='number'
+										name='quantity'
+										value={form.quantity || ''}
+										onChange={handleChange}
+										min='1'
+										className='w-full border rounded px-3 py-2'
+										required
+									/>
+								</div>
+
+								<div>
 									<p className='block text-sm mb-1'>КБЖУ (необязательно)</p>
 									<div className='grid grid-cols-4 gap-2'>
 										{(
-											['calories', 'protein', 'fat', 'carbs'] as Array<
+											['calories', 'protein', 'fat', 'carbohydrates'] as Array<
 												keyof KBJU
 											>
 										).map((key) => (
@@ -192,18 +241,18 @@ export default function ProductAdd() {
 												<label className='text-xs capitalize block mb-1'>
 													{key === 'calories'
 														? 'К'
-														: key === 'protein'
+														: key === 'proteins'
 															? 'Б'
-															: key === 'fat'
+															: key === 'fats'
 																? 'Ж'
 																: 'У'}
 												</label>
 												<input
-													name={key}
+													name={`kbju.${key}`}
 													type='number'
-													value={form.kbju[key]}
+													value={form.kbju[key] ?? 0}
 													onChange={handleChange}
-													className='w-full border rounded px-2 py-1 text-sm'
+													className='w-full border rounded px-2 py-1 text-sm text-gray-800 bg-white'
 													min={0}
 												/>
 											</div>
@@ -219,7 +268,7 @@ export default function ProductAdd() {
 										<input
 											name='priceOriginal'
 											type='number'
-											value={form.priceOriginal}
+											value={form.price}
 											onChange={handleChange}
 											className='w-full border rounded px-3 py-2'
 											required
@@ -233,7 +282,7 @@ export default function ProductAdd() {
 										<input
 											name='priceDiscounted'
 											type='number'
-											value={form.priceDiscounted}
+											value={form.discountPrice}
 											onChange={handleChange}
 											className='w-full border rounded px-3 py-2'
 											required
@@ -245,7 +294,7 @@ export default function ProductAdd() {
 									className='flex justify-center items-center my-4'
 									aria-live='polite'
 								>
-									{isValidDiscount   ? (
+									{isValidDiscount ? (
 										<span
 											className='
             bg-green-100 text-green-800 
@@ -284,7 +333,7 @@ export default function ProductAdd() {
 										type='submit'
 										className='px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600'
 									>
-										Добавить продукта
+										Добавить продукт
 									</button>
 								</div>
 							</div>

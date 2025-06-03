@@ -7,11 +7,15 @@ import { Navbar } from "@/app/(main)/_ui/navbar";
 import { OrdersTab } from './ui/orders-section';
 import { AccountTab } from './ui/account-section';
 import { PaymentTab } from './ui/payment-section';
+import { meQueryOptions } from '@/entities/auth';
+import { useQuery } from '@tanstack/react-query';
 
 export default function ProfilePage() {
 	const [activeTab, setActiveTab] = useState<'orders' | 'account' | 'payment'>(
 		'account'
 	)
+
+	const {data} = useQuery(meQueryOptions())
 
 	return (	
 		<>
@@ -26,7 +30,7 @@ export default function ProfilePage() {
 						className='rounded-full object-cover'
 					/>
 					<div>
-						<h2 className='text-xl font-semibold'>Имя Пользователя</h2>
+						<h2 className='text-xl font-semibold'>{data?.user.name} {data?.user.surname}</h2>
 					</div>
 				</div>
 
