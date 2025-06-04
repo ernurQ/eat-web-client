@@ -6,7 +6,7 @@ type Data = {
 	name: string
 	bin: string
 	phoneNumber: string
-	companyName: string
+	branchName: string
 	email: string
 	password: string
 	location: string
@@ -21,7 +21,7 @@ export function registerBranchOptions() {
 			name,
 			bin,
 			phoneNumber,
-			companyName,
+			branchName,
 			email,
 			password,
 			location,
@@ -34,7 +34,7 @@ export function registerBranchOptions() {
 						name,
 						bin,
 						phoneNumber,
-						companyName,
+						branchName,
 						email,
 						password,
 						location,
