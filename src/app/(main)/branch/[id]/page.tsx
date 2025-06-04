@@ -2,20 +2,24 @@
 
 import {
 	InstagramOutlined,
-	PhoneOutlined,
-	WhatsAppOutlined
+	MailOutlined,
+	PhoneOutlined
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
+import { ReactNode } from 'react'
 
 import { branchInfoQueryOptions } from '@/entities/branch/branch-info'
 
 export default function CompanyProfilePage() {
+	const { id } = useParams<{ id: string }>()
+
 	const {
 		data: branch,
 		isPending,
 		isError
-	} = useQuery(branchInfoQueryOptions({ id: '683d58b675b43bf1d00abc9c' }))
+	} = useQuery(branchInfoQueryOptions({ id }))
 
 	if (isPending) {
 		return (
@@ -63,18 +67,43 @@ export default function CompanyProfilePage() {
 			</div>
 			<h2 className='text-2xl font-semibold mt-6'>Связаться с нами</h2>
 			<div className='space-y-2'>
-				<p className='flex gap-3 items-center text-green-700'>
-					<PhoneOutlined />
-					{'77777777777'}
-				</p>
-				<p className='flex gap-3 items-center text-green-700'>
-					<WhatsAppOutlined />
-					{'77778883399'}
-				</p>
-				<p className='flex gap-3 items-center text-green-700'>
-					<InstagramOutlined />@{'instagram'}
-				</p>
+				{branch.contacts.map(({ id, type, value, label }) => (
+					<Contact
+						key={id}
+						type={type}
+						value={value}
+						label={label}
+					/>
+				))}
 			</div>
 		</>
+	)
+}
+
+type ContactProps = {
+	type: string
+	value: string
+	label: string
+}
+function Contact({ label, type, value }: ContactProps) {
+	let icon: ReactNode
+	if (type === 'tel') {
+		icon = <PhoneOutlined />
+	}
+	if (type === 'instagram') {
+		icon = <InstagramOutlined />
+	}
+	if (type === 'email') {
+		icon = <MailOutlined />
+	}
+
+	return (
+		<div>
+			<p>{label}</p>
+			<p className='flex gap-3 items-center text-green-700'>
+				{icon}
+				{value}
+			</p>
+		</div>
 	)
 }
