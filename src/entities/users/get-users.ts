@@ -14,11 +14,11 @@ type Data = {
 
 type ResponseData = {
 	users: Array<{
-		ID: string
-		Name: string
-		Surname: string
-		Email: string
-		Role: 'customer' | 'seller' | 'admin'
+		id: string
+		name: string
+		surname: string
+		email: string
+		role: 'customer' | 'seller' | 'admin'
 	}> | null
 	total: number
 }
@@ -38,7 +38,8 @@ export function usersQueryOptions(data: Data) {
 					}
 				})
 				.then((res) => res.data)
-				.then(({ users, total }) => ({ users: users || [], total }))
+				.then(({ users, total }) => ({ users: users || [], total })),
+		staleTime: Infinity
 	})
 }
 

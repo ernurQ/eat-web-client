@@ -131,12 +131,12 @@ export function UsersTable() {
 			dataSource={
 				isPending
 					? []
-					: data.users.map(({ ID, Name, Surname, Role }) => ({
-							key: ID,
-							[usersNameKey]: Name,
-							[usersSurnameKey]: Surname,
-							[usersRoleKey]: Role,
-							[usersChangeRoleKey]: { id: ID, currentRole: Role }
+					: data.users.map(({ id, name, surname, role }) => ({
+							key: id,
+							[usersNameKey]: name,
+							[usersSurnameKey]: surname,
+							[usersRoleKey]: role,
+							[usersChangeRoleKey]: { id: id, currentRole: role }
 						}))
 			}
 			locale={{
