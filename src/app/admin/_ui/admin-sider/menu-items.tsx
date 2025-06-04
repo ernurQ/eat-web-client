@@ -1,7 +1,13 @@
-import { ShopOutlined, UserOutlined } from '@ant-design/icons'
+import {
+	BorderlessTableOutlined,
+	ShopOutlined,
+	UserOutlined
+} from '@ant-design/icons'
 import { MenuProps } from 'antd'
 import Link from 'next/link'
 import { Key, ReactNode } from 'react'
+
+import { routes } from '@/shared/config/routes'
 
 type MenuItem = Required<MenuProps>['items'][number]
 function getItem(
@@ -20,13 +26,18 @@ function getItem(
 
 export const menuItems: MenuItem[] = [
 	getItem(
-		<Link href={'/admin/register-branch-requests'}>Запросы компании</Link>,
-		'/admin/register-branch-requests',
+		<Link href={routes.admin.registerBranchRequests()}>Запросы компании</Link>,
+		routes.admin.registerBranchRequests(),
 		<ShopOutlined />
 	),
 	getItem(
-		<Link href={'/admin/users'}>Пользователи</Link>,
-		'/admin/users',
+		<Link href={routes.admin.users()}>Пользователи</Link>,
+		routes.admin.users(),
 		<UserOutlined />
+	),
+	getItem(
+		<Link href={routes.admin.categories()}>Категории</Link>,
+		routes.admin.categories(),
+		<BorderlessTableOutlined />
 	)
 ]

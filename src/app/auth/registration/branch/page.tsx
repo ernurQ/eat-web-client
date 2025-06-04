@@ -11,7 +11,7 @@ type RegisterBranchInputs = {
 	name: string
 	bin: string
 	phoneNumber: string
-	companyName: string
+	branchName: string
 	email: string
 	password: string
 	location: string
@@ -74,7 +74,7 @@ export default function RegisterBranchPage() {
 		>
 			<div className={'mt-5'}>
 				<input
-					{...register('companyName', { required: true })}
+					{...register('branchName', { required: true })}
 					type='text'
 					className='border-b border-gray-300 w-full px-2 py-1 focus:outline-none focus:border-green-600'
 					placeholder='Название компании'

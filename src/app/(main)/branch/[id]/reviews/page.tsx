@@ -7,6 +7,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
 
 import { branchReviewsQueryOptions } from '@/entities/branch'
+
 import { ReviewModal } from './ReviewModal'
 
 const reviewsPageKey = 'reviews-page'
@@ -44,7 +45,7 @@ export default function BranchReviewsPage() {
 		<div className='max-w-3xl mx-auto px-4 py-8'>
 			<h1 className='text-3xl font-bold mb-8 text-center'>Отзывы</h1>
 			<div className='my-4 text-start'>
-				<ReviewModal />	
+				<ReviewModal branchId={id} />
 			</div>
 			{data.reviews.length > 0 ? (
 				<div className='space-y-6'>

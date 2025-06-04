@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Button, Table, TableColumnsType } from 'antd'
 import { useSearchParams } from 'next/navigation'
 
+import { api } from '@/shared/api'
 import { ErrorComponent } from '@/shared/lib/ant-design/error-component'
 import { useGetTableColumnSearchProps } from '@/shared/lib/ant-design/get-table-column-searchProps'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
@@ -26,6 +27,10 @@ interface DataType {
 	[branchRequestsNameKey]: string
 	[branchRequestsBinKey]: string
 	[branchRequestsAddressKey]: string
+	[branchRequestsDocumentKey]: {
+		branchName: string
+		document: string
+	}
 }
 
 export function RequestsTable() {
@@ -95,14 +100,37 @@ export function RequestsTable() {
 			title: 'Документ',
 			dataIndex: branchRequestsDocumentKey,
 			key: branchRequestsDocumentKey,
-			render: (value) => (
+			render: ({ branchName, document: branchDocument }) => (
 				<Button
 					type={'text'}
-					href={value}
-					download
-					target={'_blank'}
-					rel='noopener noreferrer'
 					icon={<DownloadOutlined />}
+					onClick={async () => {
+						try {
+							const response = await api.get(branchDocument, {
+								responseType: 'blob'
+							})
+
+							const contentDisposition = response.headers['content-disposition']
+							let fileName = `${branchName}-document.pdf`
+							if (contentDisposition) {
+								const match = contentDisposition.match(/filename="?(.+)"?/)
+								if (match?.[1]) fileName = decodeURIComponent(match[1])
+							}
+
+							const blobUrl = window.URL.createObjectURL(response.data)
+
+							const link = document.createElement('a')
+							link.href = blobUrl
+							link.download = fileName
+							document.body.appendChild(link)
+							link.click()
+							link.remove()
+
+							window.URL.revokeObjectURL(blobUrl)
+						} catch (e) {
+							console.error('Ошибка загрузки:', e)
+						}
+					}}
 				>
 					Скачать
 				</Button>
@@ -127,16 +155,17 @@ export function RequestsTable() {
 			dataSource={
 				isPending
 					? []
-					: data.sellers.map(
-							({ ID, CompanyName, BIN, Location, Document }) => ({
-								key: ID,
-								[branchRequestsNameKey]: CompanyName,
-								[branchRequestsBinKey]: BIN,
-								[branchRequestsAddressKey]: Location,
-								[branchRequestsDocumentKey]: Document,
-								[branchRequestsActionsKey]: ID
-							})
-						)
+					: data.sellers.map(({ id, branchName, bin, location, document }) => ({
+							key: id,
+							[branchRequestsNameKey]: branchName,
+							[branchRequestsBinKey]: bin,
+							[branchRequestsAddressKey]: location,
+							[branchRequestsDocumentKey]: {
+								branchName,
+								document
+							},
+							[branchRequestsActionsKey]: id
+						}))
 			}
 			locale={{
 				emptyText: isPending ? '' : 'Нет данных'

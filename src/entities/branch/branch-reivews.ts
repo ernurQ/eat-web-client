@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { api } from '@/shared/api'
+import { api, queryClient } from '@/shared/api'
 
 type Data = {
 	id: string
@@ -40,5 +40,11 @@ export function branchReviewsQueryOptions(data: Data) {
 					}
 				})
 				.then((res) => res.data)
+	})
+}
+
+export async function invalidateBranchReviewsQuery() {
+	await queryClient.invalidateQueries({
+		queryKey: ['branch-reviews']
 	})
 }
