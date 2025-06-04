@@ -12,19 +12,19 @@ type Data = {
 
 type ResponseData = {
 	sellers: Array<{
-		ID: string
-		Name: string
-		Surname: string
-		Email: string
-		Role: 'customer' | 'seller' | 'admin'
-		Status: 'pending' | 'approved' | 'rejected'
-		CompanyName: string
-		CompanyID: string
-		BIN: string
-		Document: string
-		PhoneNumber: string
-		ProfilePicture: string
-		Location: string
+		id: string
+		name: string
+		surname: string
+		email: string
+		role: 'customer' | 'seller' | 'admin'
+		status: 'pending' | 'approved' | 'rejected'
+		branchName: string
+		branchId: string
+		bin: string
+		document: string
+		phoneNumber: string
+		profilePicture: string
+		location: string
 	}> | null
 	total: number
 }
@@ -47,7 +47,10 @@ export function registerBranchRequestsQueryOptions(data: Data) {
 				})
 				.then((res) => res.data)
 				.then(({ sellers, total }) => ({
-					sellers: sellers || [],
+					sellers: (sellers || []).map(({ document, ...data }) => ({
+						...data,
+						document: `/auth/admin/sellers/${document}`
+					})),
 					total
 				}))
 	})
