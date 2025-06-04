@@ -30,6 +30,7 @@ export const routes = {
 
 	admin: {
 		registerBranchRequests: () => '/admin/register-branch-requests',
-		users: () => '/admin/users'
+		users: () => '/admin/users',
+		categories: () => '/admin/categories'
 	}
 }
