@@ -4,6 +4,14 @@ import { api, queryClient } from '@/shared/api'
 
 import { meQueryOptions } from '@/entities/auth'
 
+export type BranchContact = {
+	id: string
+	branchId: string
+	type: string
+	value: string
+	label: string
+}
+
 type Data = {
 	id: string
 }
@@ -15,6 +23,7 @@ type ResponseData = {
 		description: string
 		thumbnail: string
 		location: string
+		contacts: Array<BranchContact>
 	}
 }
 

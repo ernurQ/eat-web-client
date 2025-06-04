@@ -6,6 +6,7 @@ import { sellerBranchInfoOptions } from '@/entities/branch'
 
 import { BranchThumbnailSection } from '@/app/owner/account/_ui/branch-thumbnail-section'
 import { ChangeableDataSection } from '@/app/owner/account/_ui/changeable-data-section'
+import { ContactsSection } from '@/app/owner/account/_ui/contacts-section'
 import { UnchangeableDataSection } from '@/app/owner/account/_ui/unchangeable-data-section'
 
 export default function CompanyAccountPage() {
@@ -27,6 +28,8 @@ export default function CompanyAccountPage() {
 						<UnchangeableDataSection />
 
 						<ChangeableDataSection />
+
+						<ContactsSection />
 					</>
 				)}
 			</div>
