@@ -4,4 +4,6 @@ export { useFavoritesQuery } from './query-hooks/use-favorites-query'
 
 export { useAddFavoriteMutation } from './mutation-hooks/use-add-favorite-mutation'
 
-export type { Product, ProductFullData } from './product-types'
+export type { Product } from './product-types'
+
+export * from './list-products'

@@ -11,7 +11,12 @@ type Props = {
 	gridColNum?: number
 }
 
-export function ProductsList({ isPending, products, className, gridColNum=6, }: Props) {
+export function ProductsList({
+	isPending,
+	products,
+	className,
+	gridColNum = 6
+}: Props) {
 	if (isPending) return <Skeleton className={className} />
 	if (!products) throw Error('products prop is undefined')
 
