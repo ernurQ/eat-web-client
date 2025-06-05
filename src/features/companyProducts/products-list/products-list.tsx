@@ -12,36 +12,38 @@ type Props = {
 
 export function ProductsList({ isPending, products, className }: Props) {
 	if (isPending) {
-	  return <Skeleton className={className} />;
+		return <Skeleton className={className} />
 	}
-	console.log(products);
-  
+
 	if (!products) {
-	  throw new Error('products prop is undefined');
+		throw new Error('products prop is undefined')
 	}
-  
+
 	if (products.length === 0) {
-	  return (
-		<p className={cn('w-full text-center py-10 text-gray-500', className)}>
-		  Нет товаров для отображения
-		</p>
-	  );
+		return (
+			<p className={cn('w-full text-center py-10 text-gray-500', className)}>
+				Нет товаров для отображения
+			</p>
+		)
 	}
-  
+
 	return (
-	  <ul
-		className={cn(
-		  'grid gap-5 w-full',
-		  'grid-cols-1 sm:grid-cols-3 xl:grid-cols-5',
-		  className
-		)}
-	  >
-		{products.map((product) => (
-		  <ProductsListItem key={product.id} product={product} />
-		))}
-	  </ul>
-	);
-  }
+		<ul
+			className={cn(
+				'grid gap-5 w-full',
+				'grid-cols-1 sm:grid-cols-3 xl:grid-cols-5',
+				className
+			)}
+		>
+			{products.map((product) => (
+				<ProductsListItem
+					key={product.id}
+					product={product}
+				/>
+			))}
+		</ul>
+	)
+}
 
 function Skeleton({ className }: { className?: string }) {
 	return (

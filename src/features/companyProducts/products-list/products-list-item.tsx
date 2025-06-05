@@ -1,108 +1,115 @@
-import React, { useState, useMemo } from 'react'
+'use client'
+
 import Image from 'next/image'
+import React, { useMemo, useState } from 'react'
+
 import { cn } from '@/shared/lib/classnames'
+
 import { Product } from '@/entities/products'
+
 import ProductModalEdit from './ProductModalEdit'
 
 type Props = { product: Product }
 
 export function ProductsListItem({ product }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
-  const discountPercent = useMemo(() => {
-    const dp = product.discountedPrice ?? 0
-    if (product.price > dp && dp > 0) {
-      return Math.round(((product.price - dp) / product.price) * 100)
-    }
-    return 0
-  }, [product.price, product.discountedPrice])
+	const discountPercent = useMemo(() => {
+		const dp = product.discountPrice ?? 0
+		if (product.price > dp && dp > 0) {
+			return Math.round(((product.price - dp) / product.price) * 100)
+		}
+		return 0
+	}, [product.price, product.discountPrice])
 
-  return (
-    <>
-      <li
-        className={cn(
-          'w-64 mx-auto bg-white rounded-lg shadow-md overflow-hidden',
-          'flex flex-col'
-        )}
-      >
-        <button
-          onClick={() => setIsModalOpen(true)}
-          aria-label={`Открыть детали ${product.name}`}
-          className="relative h-48 w-full"
-        >
-          <Image
-            src={product.thumbnail}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
-        </button>
+	return (
+		<>
+			<li
+				className={cn(
+					'w-64 mx-auto bg-white rounded-lg shadow-md overflow-hidden',
+					'flex flex-col'
+				)}
+			>
+				<button
+					onClick={() => setIsModalOpen(true)}
+					aria-label={`Открыть детали ${product.name}`}
+					className='relative h-48 w-full'
+				>
+					<Image
+						src={thumbnail}
+						onError={() =>
+							setThumbnail('/images/placeholder/product-thumbnail.jpg')
+						}
+						sizes={'250px'}
+						priority
+						alt={product.name}
+						fill
+						className='object-cover'
+					/>
+				</button>
 
-        <div className="p-4 flex-1">
-          <h3
-            onClick={() => setIsModalOpen(true)}
-            className="text-lg font-semibold text-gray-800 hover:text-green-700 cursor-pointer"
-          >
-            {product.name}
-          </h3>
-          <p className="text-sm text-gray-600 mt-1">{product.category}</p>
-        </div>
+				<div className='p-4 flex-1'>
+					<h3
+						onClick={() => setIsModalOpen(true)}
+						className='text-lg font-semibold text-gray-800 hover:text-green-700 cursor-pointer'
+					>
+						{product.name}
+					</h3>
+					<p className='text-sm text-gray-600 mt-1'>{product.categoryName}</p>
+				</div>
 
-        <div className="px-4 py-2 bg-gray-50 flex items-center justify-between">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-          >
-            Изменить
-          </button>
-          <Price
-            price={product.price}
-            discountedPrice={product.discountedPrice}
-            discountPercent={discountPercent}
-          />
-        </div>
-      </li>
+				<div className='px-4 py-2 bg-gray-50 flex items-center justify-between'>
+					<button
+						onClick={() => setIsModalOpen(true)}
+						className='bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded'
+					>
+						Изменить
+					</button>
+					<Price
+						price={product.price}
+						discountedPrice={product.discountPrice}
+						discountPercent={discountPercent}
+					/>
+				</div>
+			</li>
 
-      {isModalOpen && (
-        <ProductModalEdit
-          product={product}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
-    </>
-  )
+			{isModalOpen && (
+				<ProductModalEdit
+					product={product}
+					onCloseAction={() => setIsModalOpen(false)}
+				/>
+			)}
+		</>
+	)
 }
 
 type PriceProps = {
-  price: number
-  discountedPrice?: number
-  discountPercent: number
+	price: number
+	discountedPrice?: number
+	discountPercent: number
 }
 
 function Price({ price, discountedPrice, discountPercent }: PriceProps) {
-  const dp = discountedPrice ?? 0
+	const dp = discountedPrice ?? 0
 
-  if (discountPercent === 0) {
-    return (
-      <div className="border-2 border-green-600 text-green-800 px-3 py-1 rounded font-bold">
-        {price.toLocaleString()} ₸
-      </div>
-    )
-  }
+	if (discountPercent === 0) {
+		return (
+			<div className='border-2 border-green-600 text-green-800 px-3 py-1 rounded font-bold'>
+				{price.toLocaleString()} ₸
+			</div>
+		)
+	}
 
-  return (
-    <div className="text-right">
-      <div className="font-bold text-green-800">
-        {dp.toLocaleString()} ₸
-      </div>
-      <div className="flex items-center text-sm text-red-600">
-        <span className="line-through mr-1">
-          {price.toLocaleString()} ₸
-        </span>
-        <span className="bg-red-100 px-1 rounded-full">
-          −{discountPercent}%
-        </span>
-      </div>
-    </div>
-  )
+	return (
+		<div className='text-right'>
+			<div className='font-bold text-green-800'>{dp.toLocaleString()} ₸</div>
+			<div className='flex items-center text-sm text-red-600'>
+				<span className='line-through mr-1'>{price.toLocaleString()} ₸</span>
+				<span className='bg-red-100 px-1 rounded-full'>
+					−{discountPercent}%
+				</span>
+			</div>
+		</div>
+	)
 }
