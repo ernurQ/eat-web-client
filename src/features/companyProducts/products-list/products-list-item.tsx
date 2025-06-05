@@ -46,6 +46,7 @@ export function ProductsListItem({ product }: Props) {
 						alt={product.name}
 						fill
 						className='object-cover'
+						unoptimized
 					/>
 				</button>
 

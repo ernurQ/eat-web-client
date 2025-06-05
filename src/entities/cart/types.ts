@@ -1,5 +1,4 @@
-import { Product } from "@/entities/products/product-types"
-
+import { Product } from '@/entities/products/product-types'
 
 export interface CartProduct extends Product {
 	id: string

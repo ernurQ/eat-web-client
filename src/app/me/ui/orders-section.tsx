@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 
 export function OrdersTab() {
 	const [orders, setOrders] = useState<OrderData[]>([])
-	
 
 	useEffect(() => {
 		const storedOrders = localStorage.getItem('orderedCart')
@@ -77,9 +76,8 @@ function OrderProductRow({
 	}
 	order: OrderData
 }) {
-	const [timeLeft, setTimeLeft] = useState(0);
-	const isTimeUp = timeLeft <= 0;
-
+	const [timeLeft, setTimeLeft] = useState(0)
+	const isTimeUp = timeLeft <= 0
 
 	useEffect(() => {
 		if (!order.expirationTime) return
@@ -118,7 +116,7 @@ function OrderProductRow({
 			<div className='text-right'>
 				{order.expirationTime && timeLeft > 0 && (
 					<>
-						<p>Ваш код: {product.orderCode}</p>
+						<p>Ваш код: {'2134'}</p>
 						<p>
 							Время истечет через:{' '}
 							<span
