@@ -59,18 +59,21 @@ export function ProductsListItem({ product }: Props) {
 					<p className='text-sm text-gray-600 mt-1'>{product.categoryName}</p>
 				</div>
 
-				<div className='px-4 py-2 bg-gray-50 flex items-center justify-between'>
+				<div className='px-4 py-2 flex flex-col-reverse'>
 					<button
 						onClick={() => setIsModalOpen(true)}
-						className='bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded'
+						className='bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-full my-2'
 					>
 						Изменить
 					</button>
-					<Price
-						price={product.price}
-						discountedPrice={product.discountPrice}
-						discountPercent={discountPercent}
-					/>
+					<div className='flex'>
+						<span>Оставшееся количество: {product.quantity}</span>
+						<Price
+							price={product.price}
+							discountedPrice={product.discountPrice}
+							discountPercent={discountPercent}
+						/>
+					</div>
 				</div>
 			</li>
 
@@ -102,10 +105,12 @@ function Price({ price, discountedPrice, discountPercent }: PriceProps) {
 	}
 
 	return (
-		<div className='text-right'>
+		<div className=''>
 			<div className='font-bold text-green-800'>{dp.toLocaleString()} ₸</div>
 			<div className='flex items-center text-sm text-red-600'>
-				<span className='line-through mr-1'>{price.toLocaleString()} ₸</span>
+				<span className='line-through mr-1 text-nowrap'>
+					{price.toLocaleString()} ₸
+				</span>
 				<span className='bg-red-100 px-1 rounded-full'>
 					−{discountPercent}%
 				</span>

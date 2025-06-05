@@ -20,6 +20,12 @@ export function AntDesignProvider({ children }: PropsWithChildren) {
 							itemSelectedBg: 'rgb(205, 223, 149)',
 							itemSelectedColor: 'black',
 							itemBg: '#f6ffed'
+						},
+						Select: {
+							borderRadius: 16,
+							fontFamily: 'Montserrat',
+							colorText: 'gray',
+							margin: 5
 						}
 					}
 				}}
