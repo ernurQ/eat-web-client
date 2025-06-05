@@ -2,33 +2,22 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import { BsPersonCircle } from 'react-icons/bs'
 
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 import { EatWebLogo } from '@/shared/ui/eat-web-logo'
+import { useQuery } from '@tanstack/react-query'
+import { meQueryOptions } from '@/entities/auth'
 
 export function Navbar() {
 	const [showMobileNav, setShowMobileNav] = useState(false)
-	const [userEmail, setUserEmail] = useState('')
 	const pathname = usePathname()
 
-	useEffect(() => {
-		async function fetchUser() {
-			try {
-				const res = await fetch('/api/user/me', { credentials: 'include' })
-				if (res.ok) {
-					const { user } = await res.json()
-					setUserEmail(user.email || '')
-				}
-			} catch {
-				setUserEmail('')
-			}
-		}
-		fetchUser()
-	}, [])
+	const {data} = useQuery(meQueryOptions())
+
 
 	return (
 		<nav className='w-full bg-white shadow-lg z-50'>
@@ -69,9 +58,9 @@ export function Navbar() {
 						<BsPersonCircle size={24} />
 					</Link>
 
-					{userEmail ? (
+					{data?.user.name ? (
 						<span className='hidden lg:inline text-green-700 font-medium truncate max-w-xs'>
-							{userEmail}
+							{data.user.name}
 						</span>
 					) : (
 						<Link

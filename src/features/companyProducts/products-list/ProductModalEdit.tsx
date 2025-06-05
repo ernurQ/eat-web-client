@@ -105,7 +105,7 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 							{
 								label: 'Дата истечения',
 								name: 'expirationDate' as const,
-								type: 'date'
+								type: 'datetime-local'
 							},
 							{
 								label: 'Количество',
@@ -123,40 +123,40 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 								type: 'number'
 							}
 						].map(({ name, label, type }) => (
-							<div key={name}>
-								<label className='block text-sm font-medium text-gray-700 mb-1'>
+							<fieldset className='border pl-4 rounded' key={name}>
+								<legend className='block text-sm font-medium text-gray-700 mb-1'>
 									{label}
-								</label>
+								</legend>
 								<input
 									{...register(name)}
 									name={name}
 									type={type}
-									className='w-full border rounded px-3 py-2'
+									className='w-full border-none outline-none rounded py-2'
 								/>
-							</div>
+							</fieldset>
 						))}
 					</div>
 
 					{/* Описание и состав */}
-					<div>
-						<label className='block text-sm font-medium text-gray-700 mb-1'>
+					<fieldset className='border pl-4 rounded'>
+						<legend className='block text-sm font-medium text-gray-700 mb-1'>
 							Описание
-						</label>
+						</legend>
 						<textarea
 							{...register('description')}
 							rows={3}
-							className='w-full border rounded px-3 py-2'
+							className='w-full border-none outline-none rounded py-2'
 						/>
-					</div>
-					<div>
-						<label className='block text-sm font-medium text-gray-700 mb-1'>
+					</fieldset>
+					<fieldset className='border pl-4 rounded'>
+						<legend className='block text-sm font-medium text-gray-700'>
 							Состав
-						</label>
+						</legend>
 						<input
 							{...register('composition')}
-							className='w-full border rounded px-3 py-2'
+							className='w-full border-none outline-none rounded py-2'
 						/>
-					</div>
+					</fieldset>
 
 					{/* Пищевая ценность */}
 					<fieldset className='border p-4 rounded space-y-4'>

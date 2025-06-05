@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import { BsBasket3, BsPersonCircle } from 'react-icons/bs'
 
@@ -10,13 +10,11 @@ import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 import { EatWebLogo } from '@/shared/ui/eat-web-logo'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/shared/api'
 import { meQueryOptions } from '@/entities/auth'
 
 export function Navbar() {
 
 	const [mobileOpen, setMobileOpen] = useState(false)
-	const [userEmail, setUserEmail] = useState('')
 	const pathname = usePathname()
 
 	const {data} = useQuery(meQueryOptions())
@@ -108,7 +106,7 @@ export function Navbar() {
 			<MobileNav
 				show={mobileOpen}
 				pathname={pathname}
-				userEmail={userEmail}
+				userEmail={data?.user.name}
 				onClose={() => setMobileOpen(false)}
 			/>
 		</nav>
