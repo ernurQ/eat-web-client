@@ -7,3 +7,4 @@ export { useAddFavoriteMutation } from './mutation-hooks/use-add-favorite-mutati
 export type { Product } from './product-types'
 
 export * from './list-products'
+export * from './add-product'

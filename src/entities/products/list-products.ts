@@ -77,3 +77,9 @@ export function listOwnerProductsOptions(data: Omit<Data, 'branchId'>) {
 		}
 	})
 }
+
+export async function invalidateProductsQuery() {
+	await queryClient.invalidateQueries({
+		queryKey: ['list-product']
+	})
+}
