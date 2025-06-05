@@ -23,6 +23,7 @@ type PriceProps = {
 
 export function ProductsListItem({ product }: Props) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
 	return (
 		<>
@@ -30,11 +31,15 @@ export function ProductsListItem({ product }: Props) {
 				className={cn('w-48 mx-auto bg-white', 'flex flex-col justify-between')}
 			>
 				<div>
-					<button className={'relative h-48 w-48 block flex-shrink mx-auto'}>
+					<div className={'relative h-48 w-48 block flex-shrink mx-auto'}>
 						<Image
-							src={product.thumbnail}
+							src={thumbnail}
+							onError={() =>
+								setThumbnail('/images/placeholder/product-thumbnail.jpg')
+							}
 							alt={product.name}
 							fill
+							priority
 							sizes={
 								'(max-width: 640px) 100vw, ' +
 								'(max-width: 768px) 50vw, ' +
@@ -43,22 +48,22 @@ export function ProductsListItem({ product }: Props) {
 							}
 							className={'rounded'}
 						/>
-					</button>
+					</div>
 
 					<div className={'flex mt-2 justify-between text-base items-start'}>
 						<div className={'flex flex-wrap items-center gap-x-2'}>
 							<span className={'font-medium flex-wrap'}>{product.name}</span>
 							<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
 							<Link
-								href={routes.branch.profile(product.department.id)}
+								href={routes.branch.profile(product.branchId)}
 								className={'text-[#228536]'}
 							>
-								{product.department.name}
+								{product.branchName}
 							</Link>
 						</div>
 
 						<AddToFavoritesButton
-							isFavorite={product.isFavorite}
+							isFavorite={false}
 							productId={product.id}
 						/>
 					</div>
@@ -75,7 +80,7 @@ export function ProductsListItem({ product }: Props) {
 					</button>
 					<Price
 						price={product.price}
-						discountedPrice={product.discountedPrice ?? 0}
+						discountedPrice={product.discountPrice ?? 0}
 					/>
 				</div>
 			</li>

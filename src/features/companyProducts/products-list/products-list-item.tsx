@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import React, { useMemo, useState } from 'react'
 
@@ -11,14 +13,15 @@ type Props = { product: Product }
 
 export function ProductsListItem({ product }: Props) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
 	const discountPercent = useMemo(() => {
-		const dp = product.discountedPrice ?? 0
+		const dp = product.discountPrice ?? 0
 		if (product.price > dp && dp > 0) {
 			return Math.round(((product.price - dp) / product.price) * 100)
 		}
 		return 0
-	}, [product.price, product.discountedPrice])
+	}, [product.price, product.discountPrice])
 
 	return (
 		<>
@@ -34,7 +37,12 @@ export function ProductsListItem({ product }: Props) {
 					className='relative h-48 w-full'
 				>
 					<Image
-						src={product.thumbnail}
+						src={thumbnail}
+						onError={() =>
+							setThumbnail('/images/placeholder/product-thumbnail.jpg')
+						}
+						sizes={'250px'}
+						priority
 						alt={product.name}
 						fill
 						className='object-cover'
@@ -48,19 +56,19 @@ export function ProductsListItem({ product }: Props) {
 					>
 						{product.name}
 					</h3>
-					<p className='text-sm text-gray-600 mt-1'>{product.category}</p>
+					<p className='text-sm text-gray-600 mt-1'>{product.categoryName}</p>
 				</div>
 
 				<div className='px-4 py-2 bg-gray-50 flex items-center justify-between'>
 					<button
 						onClick={() => setIsModalOpen(true)}
-						className='bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-full'
+						className='bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded'
 					>
 						Изменить
 					</button>
 					<Price
 						price={product.price}
-						discountedPrice={product.discountedPrice}
+						discountedPrice={product.discountPrice}
 						discountPercent={discountPercent}
 					/>
 				</div>
@@ -69,7 +77,7 @@ export function ProductsListItem({ product }: Props) {
 			{isModalOpen && (
 				<ProductModalEdit
 					product={product}
-					onClose={() => setIsModalOpen(false)}
+					onCloseAction={() => setIsModalOpen(false)}
 				/>
 			)}
 		</>
