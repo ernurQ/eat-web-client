@@ -83,7 +83,7 @@ export function ReviewModal({ branchId }: Props) {
 							{ required: true, message: 'Пожалуйста, поставьте оценку' }
 						]}
 					>
-						<Rate allowHalf />
+						<Rate />
 					</Form.Item>
 
 					<Form.Item

@@ -105,15 +105,17 @@ export default function BranchReviewsPage() {
 				</div>
 			)}
 
-			<Pagination
-				current={1}
-				total={data.total}
-				pageSize={reviewsPageSize}
-				align={'center'}
-				onChange={(page) =>
-					setSearchParam({ [reviewsPageKey]: page.toString() })
-				}
-			/>
+			{data.reviews.length !== 0 && (
+				<Pagination
+					current={page}
+					total={data.total}
+					pageSize={reviewsPageSize}
+					align={'center'}
+					onChange={(page) =>
+						setSearchParam({ [reviewsPageKey]: page.toString() })
+					}
+				/>
+			)}
 		</div>
 	)
 }
