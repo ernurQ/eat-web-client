@@ -17,3 +17,11 @@ export type Product = {
 	carbohydrates: number
 	version: number
 }
+
+export type FavoriteProduct = {
+	id: string
+	name: string
+	thumbnail: string
+	price: number
+	discount: number
+}

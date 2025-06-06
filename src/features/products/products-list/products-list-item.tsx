@@ -7,13 +7,14 @@ import React, { useState } from 'react'
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 
-import { Product } from '@/entities/products'
-
 import ProductModal from '@/features/products/products-list/ProductModal'
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
 
+import { ListItem } from './types'
+
 type Props = {
-	product: Product
+	product: ListItem
+	isFavorite?: boolean
 }
 
 type PriceProps = {
@@ -21,7 +22,7 @@ type PriceProps = {
 	discountedPrice: number
 }
 
-export function ProductsListItem({ product }: Props) {
+export function ProductsListItem({ product, isFavorite }: Props) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
@@ -54,16 +55,19 @@ export function ProductsListItem({ product }: Props) {
 						<div className={'flex flex-wrap items-center gap-x-2'}>
 							<span className={'font-medium flex-wrap'}>{product.name}</span>
 							<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
-							<Link
-								href={routes.branch.profile(product.branchId)}
-								className={'text-[#228536]'}
-							>
-								{product.branchName}
-							</Link>
+
+							{product.branchId && (
+								<Link
+									href={routes.branch.profile(product.branchId)}
+									className={'text-[#228536]'}
+								>
+									{product.branchName}
+								</Link>
+							)}
 						</div>
 
 						<AddToFavoritesButton
-							isFavorite={false}
+							isFavorite={isFavorite}
 							productId={product.id}
 						/>
 					</div>
@@ -88,8 +92,8 @@ export function ProductsListItem({ product }: Props) {
 			{/* Modal */}
 			{isModalOpen && (
 				<ProductModal
-					product={product}
-					onClose={() => setIsModalOpen(false)}
+					productId={product.id}
+					onCloseAction={() => setIsModalOpen(false)}
 				/>
 			)}
 		</>

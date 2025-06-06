@@ -16,18 +16,13 @@ type ListItemProps = {
 }
 
 export function ProductsListItem({ product }: ListItemProps) {
-	const {
-		id,
-		thumbnail,
-		name,
-		discountedPrice,
-		price,
-		quantity,
-		maxQuantity,
-	} = product
-	
+	const { id, thumbnail, name, discountPrice, price, quantity, maxQuantity } =
+		product
+
 	const [initQuantity, setInitQuantity] = useState(quantity)
-	const totalPrice = discountedPrice ? discountedPrice * initQuantity : price * initQuantity;
+	const totalPrice = discountPrice
+		? discountPrice * initQuantity
+		: price * initQuantity
 	return (
 		<li
 			className={cn(
@@ -57,7 +52,7 @@ export function ProductsListItem({ product }: ListItemProps) {
 			</Link>
 			<div className={'w-48 sm:w-full'}>
 				<Link href={routes.product(id)}>{name}</Link>
-				<div className={'text-[#F7C04F] font-bold'}>{discountedPrice}</div>
+				<div className={'text-[#F7C04F] font-bold'}>{discountPrice}</div>
 				<ProductQuantityForm
 					id={id}
 					quantity={initQuantity}

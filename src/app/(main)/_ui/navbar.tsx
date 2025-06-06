@@ -1,5 +1,6 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -9,15 +10,14 @@ import { BsBasket3, BsPersonCircle } from 'react-icons/bs'
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 import { EatWebLogo } from '@/shared/ui/eat-web-logo'
-import { useQuery } from '@tanstack/react-query'
+
 import { meQueryOptions } from '@/entities/auth'
 
 export function Navbar() {
-
 	const [mobileOpen, setMobileOpen] = useState(false)
 	const pathname = usePathname()
 
-	const {data} = useQuery(meQueryOptions())
+	const { data } = useQuery(meQueryOptions())
 
 	return (
 		<nav className='left-0 right-0 bg-white shadow-md z-50'>
@@ -106,7 +106,7 @@ export function Navbar() {
 			<MobileNav
 				show={mobileOpen}
 				pathname={pathname}
-				userEmail={data?.user.name}
+				userEmail={data?.user.name || ''}
 				onClose={() => setMobileOpen(false)}
 			/>
 		</nav>
