@@ -1,11 +1,12 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 
 import { cn } from '@/shared/lib/classnames'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
 
-import { useCategoriesQuery } from '@/entities/products'
+import { categoriesQueryOptions } from '@/entities/category'
 
 import {
 	CATALOG_PAGE,
@@ -16,7 +17,11 @@ export function ProductCategorySelect() {
 	const searchParams = useSearchParams()
 	const setSearchParam = useSetSearchParam()
 
-	const { data: categories, isPending, isError } = useCategoriesQuery()
+	const {
+		data: categories,
+		isPending,
+		isError
+	} = useQuery(categoriesQueryOptions())
 	const selectedCategory = searchParams.get(CATALOG_PRODUCT_CATEGORY) || ''
 
 	if (isPending) return <Skeleton />
@@ -43,16 +48,16 @@ export function ProductCategorySelect() {
 				'sm:px-12 md:px-20 lg:px-32'
 			)}
 		>
-			{categories?.map((category) => (
-				<li key={category}>
+			{categories?.map(({ id, name }) => (
+				<li key={id}>
 					<button
-						onClick={() => onCategoryClick(category)}
+						onClick={() => onCategoryClick(name)}
 						className={cn({
 							'text-[#BAD36E] underline underline-offset-8':
-								selectedCategory === category
+								selectedCategory === name
 						})}
 					>
-						{category}
+						{name}
 					</button>
 				</li>
 			))}

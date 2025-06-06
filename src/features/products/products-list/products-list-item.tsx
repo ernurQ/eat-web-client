@@ -7,13 +7,14 @@ import React, { useState } from 'react'
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 
-import { Product } from '@/entities/products'
-
-import ProductModal from '@/features/products/products-list/ProductModal'
+import { AddToCartButton } from '@/features/products/products-list/add-to-cart-buttton'
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
 
+import { ListItem } from './types'
+
 type Props = {
-	product: Product
+	product: ListItem
+	isFavorite?: boolean
 }
 
 type PriceProps = {
@@ -21,8 +22,7 @@ type PriceProps = {
 	discountedPrice: number
 }
 
-export function ProductsListItem({ product }: Props) {
-	const [isModalOpen, setIsModalOpen] = useState(false)
+export function ProductsListItem({ product, isFavorite }: Props) {
 	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
 	return (
@@ -54,44 +54,33 @@ export function ProductsListItem({ product }: Props) {
 						<div className={'flex flex-wrap items-center gap-x-2'}>
 							<span className={'font-medium flex-wrap'}>{product.name}</span>
 							<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
-							<Link
-								href={routes.branch.profile(product.branchId)}
-								className={'text-[#228536]'}
-							>
-								{product.branchName}
-							</Link>
+
+							{product.branchId && (
+								<Link
+									href={routes.branch.profile(product.branchId)}
+									className={'text-[#228536]'}
+								>
+									{product.branchName}
+								</Link>
+							)}
 						</div>
 
 						<AddToFavoritesButton
-							isFavorite={false}
+							isFavorite={isFavorite}
 							productId={product.id}
 						/>
 					</div>
 				</div>
 
 				<div className={'flex flex-wrap justify-between mt-2'}>
-					<button
-						onClick={() => setIsModalOpen(true)} // Open modal on click
-						className={
-							'text-sm outline-none bg-[#F7C04F] h-11 w-24 flex justify-center items-center rounded text-white hover:bg-[#ba903c] transition-colors ease-in-out duration-300'
-						}
-					>
-						Добавить в корзину
-					</button>
+					<AddToCartButton productId={product.id} />
+
 					<Price
 						price={product.price}
 						discountedPrice={product.discountPrice ?? 0}
 					/>
 				</div>
 			</li>
-
-			{/* Modal */}
-			{isModalOpen && (
-				<ProductModal
-					product={product}
-					onClose={() => setIsModalOpen(false)}
-				/>
-			)}
 		</>
 	)
 }

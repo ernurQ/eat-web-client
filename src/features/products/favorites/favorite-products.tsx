@@ -1,18 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { cn } from '@/shared/lib/classnames'
 import { Header } from '@/shared/ui/header'
-import { PaginationButtons } from '@/shared/ui/pagination-buttons'
 
-import { CATALOG_PAGE } from '@/features/products/catalog/constants'
-import { useFavoriteProducts } from '@/features/products/favorites/use-favorite-products'
+import { listFavoritesOptions } from '@/entities/favorites'
+
 import { ProductsList } from '@/features/products/products-list'
 
 export function FavoriteProducts() {
-	const {
-		data: products,
-		isPending,
-		currentPage,
-		hasNextPage
-	} = useFavoriteProducts()
+	const { data: products, isPending } = useQuery(listFavoritesOptions())
 
 	return (
 		<div
@@ -27,14 +23,7 @@ export function FavoriteProducts() {
 				products={products}
 				isPending={isPending}
 				className={'mt-10'}
-			/>
-
-			<PaginationButtons
-				currentPage={currentPage}
-				pageSearchParam={CATALOG_PAGE}
-				disabled={isPending}
-				hasNextPage={hasNextPage}
-				className={'absolute bottom-0 right-1/2 translate-x-1/2'}
+				isFavoriteProducts={true}
 			/>
 		</div>
 	)

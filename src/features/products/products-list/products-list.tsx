@@ -1,21 +1,23 @@
 import { cn } from '@/shared/lib/classnames'
 
-import { Product } from '@/entities/products'
-
 import { ProductsListItem } from '@/features/products/products-list/products-list-item'
 
+import { ListItem } from './types'
+
 type Props = {
-	products?: Product[]
+	products?: Array<ListItem>
 	isPending: boolean
 	className?: string
 	gridColNum?: number
+	isFavoriteProducts?: boolean
 }
 
 export function ProductsList({
 	isPending,
 	products,
 	className,
-	gridColNum = 6
+	gridColNum = 6,
+	isFavoriteProducts
 }: Props) {
 	if (isPending) return <Skeleton className={className} />
 	if (!products) throw Error('products prop is undefined')
@@ -31,6 +33,7 @@ export function ProductsList({
 			{products.map((product) => (
 				<ProductsListItem
 					key={product.id}
+					isFavorite={isFavoriteProducts}
 					product={product}
 				/>
 			))}

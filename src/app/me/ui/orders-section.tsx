@@ -77,7 +77,6 @@ function OrderProductRow({
 	order: OrderData
 }) {
 	const [timeLeft, setTimeLeft] = useState(0)
-	const isTimeUp = timeLeft <= 0
 
 	useEffect(() => {
 		if (!order.expirationTime) return
