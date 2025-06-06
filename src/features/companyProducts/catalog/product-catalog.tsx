@@ -15,18 +15,26 @@ import { ProductCategorySelect } from '@/features/companyProducts/catalog/produc
 import { ProductNameSearch } from '@/features/companyProducts/catalog/product-name-search'
 import { ProductsList } from '@/features/companyProducts/products-list'
 
-const productsPageKey = 'page'
-const productsPageSize = 6
+import {
+	CATALOG_PAGE,
+	CATALOG_PAGE_SIZE,
+	CATALOG_PRODUCT_CATEGORY,
+	CATALOG_PRODUCT_NAME
+} from './constants'
 
 export function ProductCatalog() {
 	const searchParams = useSearchParams()
 	const setSearchParam = useSetSearchParam()
-	const page = parseInt(searchParams.get(productsPageKey) || '1', 10)
+	const page = parseInt(searchParams.get(CATALOG_PAGE) || '1', 10)
+	const name = searchParams.get(CATALOG_PRODUCT_NAME) || undefined
+	const category = searchParams.get(CATALOG_PRODUCT_CATEGORY) || undefined
 
 	const { data, isPending } = useQuery(
 		listOwnerProductsOptions({
 			page,
-			size: productsPageSize
+			size: CATALOG_PAGE_SIZE,
+			name,
+			category
 		})
 	)
 
@@ -56,10 +64,10 @@ export function ProductCatalog() {
 				<Pagination
 					current={page}
 					total={data?.total}
-					pageSize={productsPageSize}
+					pageSize={CATALOG_PAGE_SIZE}
 					align={'center'}
 					onChange={(page) =>
-						setSearchParam({ [productsPageKey]: page.toString() })
+						setSearchParam({ [CATALOG_PAGE]: page.toString() })
 					}
 					style={{ marginTop: 30 }}
 				/>

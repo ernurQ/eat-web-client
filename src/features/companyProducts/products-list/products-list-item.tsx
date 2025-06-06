@@ -12,6 +12,7 @@ import ProductModalEdit from './ProductModalEdit'
 type Props = { product: Product }
 
 export function ProductsListItem({ product }: Props) {
+	console.log(product.thumbnail)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
@@ -46,6 +47,7 @@ export function ProductsListItem({ product }: Props) {
 						alt={product.name}
 						fill
 						className='object-cover'
+						unoptimized
 					/>
 				</button>
 

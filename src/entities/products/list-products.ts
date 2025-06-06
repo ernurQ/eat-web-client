@@ -8,6 +8,8 @@ type Data = {
 	page: number
 	size: number
 	branchId?: string
+	name?: string
+	category?: string
 }
 
 type ResponseData = {
@@ -34,11 +36,17 @@ type ResponseData = {
 }
 
 async function getProducts(data: Data) {
-	const { page, size, branchId } = data
+	const { page, size, branchId, name, category } = data
 
 	return api
 		.get<ResponseData>('/products', {
-			params: { page, limit: size, branchId }
+			params: {
+				page,
+				limit: size,
+				branchId,
+				search: name,
+				categoryName: category
+			}
 		})
 		.then((res) => ({
 			products: res.data.products || [],
@@ -48,7 +56,7 @@ async function getProducts(data: Data) {
 			products: products.map(({ thumbnail, ...data }) => {
 				return {
 					...data,
-					thumbnail: `http://localhost/api/products/images/${(thumbnail.at(0) || '').split('/').slice(1).join('/')}`
+					thumbnail: `http://localhost/api/products/images/${(thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
 				}
 			}),
 			total
@@ -56,30 +64,30 @@ async function getProducts(data: Data) {
 }
 
 export function listProductsOptions(data: Data) {
-	const { page, size, branchId } = data
+	const { page, size, branchId, name, category } = data
 
 	return queryOptions({
-		queryKey: ['list-product', { page, size, branchId }],
+		queryKey: ['list-product', { page, size, branchId, name, category }],
 		queryFn: () => getProducts(data)
 	})
 }
 
 export function listOwnerProductsOptions(data: Omit<Data, 'branchId'>) {
-	const { page, size } = data
+	const { page, size, name, category } = data
 
 	return queryOptions({
-		queryKey: ['list-product', { page, size }],
+		queryKey: ['list-owner-product', { page, size, name, category }],
 		queryFn: async () => {
 			const data = await queryClient.fetchQuery(meQueryOptions())
 			const branchId = data.user.branchId
 
-			return getProducts({ page, size, branchId })
+			return getProducts({ page, size, branchId, name, category })
 		}
 	})
 }
 
-export async function invalidateProductsQuery() {
+export async function invalidateOwnerProductsQuery() {
 	await queryClient.invalidateQueries({
-		queryKey: ['list-product']
+		queryKey: ['list-owner-product']
 	})
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 import { cn } from '@/shared/lib/classnames'
@@ -15,15 +15,12 @@ const SAVED_CARDS = [{ id: 'card1', brand: 'VISA', last4: '1234' }]
 
 export function BuyCartProductsButton() {
 	const { data: products } = useCartProductsQuery()
-	const queryClient = useQueryClient()
 	const isEmpty = products?.length === 0
 	const { data: price, isPending, isStale } = useCartTotalPriceQuery()
-	const { mutate: buyProducts, isPending: isBuyProductsPending } =
-		useBuyCartProductsMutation()
+	const { isPending: isBuyProductsPending } = useBuyCartProductsMutation()
 
 	const [showPaymentModal, setShowPaymentModal] = useState(false)
 	const [showSuccessModal, setShowSuccessModal] = useState(false)
-	const [selectedCard, setSelectedCard] = useState<string | null>(null)
 
 	const [uniqueCode, setUniqueCode] = useState('')
 	const [timeLeft, setTimeLeft] = useState(0)
@@ -51,13 +48,12 @@ export function BuyCartProductsButton() {
 			</button>
 
 			{/* Payment Method Modal */}
-			{showPaymentModal && (
+			{showPaymentModal && price && (
 				<PaymentMethodModal
 					cards={SAVED_CARDS}
 					onClose={() => setShowPaymentModal(false)}
 					totalPrice={price}
-					onPay={(cardId) => {
-						setSelectedCard(cardId)
+					onPay={() => {
 						setShowPaymentModal(false)
 						setShowSuccessModal(true)
 
@@ -103,7 +99,6 @@ export function BuyCartProductsButton() {
 
 						// 6. Remove the "cart" key to clear the shopping cart
 						localStorage.removeItem('cart')
-						queryClient.invalidateQueries('cart')
 						// --- Order Processing End ---
 					}}
 				/>
@@ -115,7 +110,7 @@ export function BuyCartProductsButton() {
 					code={uniqueCode}
 					timeLeft={timeLeft}
 					onClose={() => setShowSuccessModal(false)}
-					onTick={(newTime) => setTimeLeft(newTime)}
+					onTick={() => setTimeLeft(0)}
 				/>
 			)}
 		</div>
@@ -192,7 +187,7 @@ function SuccessModal({
 }: {
 	code: string
 	timeLeft: number
-	onTick: (newTime: number) => void
+	onTick: (cb: (newTime: number) => void) => void
 	onClose: () => void
 }) {
 	useEffect(() => {
@@ -222,7 +217,7 @@ function SuccessModal({
 				<h2 className='text-lg font-semibold mb-4 text-center'>
 					Спасибо за покупку!
 				</h2>
-				<img
+				<Image
 					src='/images/payment/success-payment-image.png'
 					alt='Success'
 					className='w-32 h-32 mb-4 object-contain'

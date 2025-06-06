@@ -1,10 +1,18 @@
 'use client'
 
+import { useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
-import { Product } from '@/entities/products'
+import {
+	Product,
+	invalidateOwnerProductsQuery,
+	updateProductOptions
+} from '@/entities/products'
+
+import { DeleteProductButton } from '@/features/companyProducts/products-list/delete-product-button'
 
 type Props = {
 	product: Product
@@ -39,8 +47,32 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 		}
 	})
 
+	const { mutate: updateProduct, isPending } = useMutation({
+		...updateProductOptions(),
+		onMutate: () => {
+			toast.loading('Обновляем продукт', { id: 'update-product-loading' })
+		},
+		onSettled: () => {
+			toast.dismiss('update-product-loading')
+		},
+		onError: () => {
+			toast.error('Что-то пошло не так')
+		},
+		onSuccess: async () => {
+			toast.success('Продукт был обновлен')
+			await invalidateOwnerProductsQuery()
+		}
+	})
+
 	const onUpdateProduct = (values: UpdateProductInputs) => {
-		console.log(values)
+		const thumbnail = values.thumbnail?.item(0) || undefined
+		updateProduct({
+			...values,
+			thumbnail,
+			productId: product.id,
+			branchId: product.branchId,
+			expirationDate: values.expirationDate.toISOString()
+		})
 	}
 
 	return (
@@ -82,6 +114,7 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 							</div>
 
 							<input
+								{...register('thumbnail')}
 								type='file'
 								accept='image/*'
 								className='text-sm'
@@ -123,7 +156,10 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 								type: 'number'
 							}
 						].map(({ name, label, type }) => (
-							<fieldset className='border pl-4 rounded' key={name}>
+							<fieldset
+								className='border pl-4 rounded'
+								key={name}
+							>
 								<legend className='block text-sm font-medium text-gray-700 mb-1'>
 									{label}
 								</legend>
@@ -187,20 +223,25 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 					</fieldset>
 
 					{/* Кнопки */}
-					<div className='flex justify-end space-x-2'>
-						<button
-							type='button'
-							onClick={onCloseAction}
-							className='px-4 py-2 border rounded hover:bg-gray-100'
-						>
-							Отмена
-						</button>
-						<button
-							type='submit'
-							className='px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
-						>
-							Сохранить
-						</button>
+					<div className='flex justify-between space-x-2'>
+						<DeleteProductButton productId={product.id} />
+
+						<div className={'flex gap-x-5'}>
+							<button
+								type='button'
+								onClick={onCloseAction}
+								className='px-4 py-2 border rounded hover:bg-gray-100'
+							>
+								Отмена
+							</button>
+							<button
+								type='submit'
+								disabled={isPending}
+								className='px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
+							>
+								Сохранить
+							</button>
+						</div>
 					</div>
 				</form>
 			</div>

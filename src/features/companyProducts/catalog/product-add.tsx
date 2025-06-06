@@ -4,7 +4,10 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { addProductOptions, invalidateProductsQuery } from '@/entities/products'
+import {
+	addProductOptions,
+	invalidateOwnerProductsQuery
+} from '@/entities/products'
 
 type AddProductInputs = {
 	name: string
@@ -40,7 +43,7 @@ export default function ProductAdd() {
 		},
 		onSuccess: async () => {
 			toast.success('Продукт был добавлен')
-			await invalidateProductsQuery()
+			await invalidateOwnerProductsQuery()
 			setIsModalOpen(false)
 			reset()
 		}
