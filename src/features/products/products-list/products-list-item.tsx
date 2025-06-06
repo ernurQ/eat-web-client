@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import { routes } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/classnames'
 
-import ProductModal from '@/features/products/products-list/ProductModal'
+import { AddToCartButton } from '@/features/products/products-list/add-to-cart-buttton'
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
 
 import { ListItem } from './types'
@@ -23,7 +23,6 @@ type PriceProps = {
 }
 
 export function ProductsListItem({ product, isFavorite }: Props) {
-	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
 	return (
@@ -74,28 +73,14 @@ export function ProductsListItem({ product, isFavorite }: Props) {
 				</div>
 
 				<div className={'flex flex-wrap justify-between mt-2'}>
-					<button
-						onClick={() => setIsModalOpen(true)} // Open modal on click
-						className={
-							'text-sm outline-none bg-[#F7C04F] h-11 w-24 flex justify-center items-center rounded text-white hover:bg-[#ba903c] transition-colors ease-in-out duration-300'
-						}
-					>
-						Добавить в корзину
-					</button>
+					<AddToCartButton productId={product.id} />
+
 					<Price
 						price={product.price}
 						discountedPrice={product.discountPrice ?? 0}
 					/>
 				</div>
 			</li>
-
-			{/* Modal */}
-			{isModalOpen && (
-				<ProductModal
-					productId={product.id}
-					onCloseAction={() => setIsModalOpen(false)}
-				/>
-			)}
 		</>
 	)
 }
