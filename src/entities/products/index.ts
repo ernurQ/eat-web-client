@@ -8,3 +8,4 @@ export type { Product } from './product-types'
 
 export * from './list-products'
 export * from './add-product'
+export * from './delete-product'

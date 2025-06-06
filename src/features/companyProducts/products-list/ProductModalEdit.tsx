@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 
 import { Product } from '@/entities/products'
 
+import { DeleteProductButton } from '@/features/companyProducts/products-list/delete-product-button'
+
 type Props = {
 	product: Product
 	onCloseAction: () => void
@@ -123,7 +125,10 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 								type: 'number'
 							}
 						].map(({ name, label, type }) => (
-							<fieldset className='border pl-4 rounded' key={name}>
+							<fieldset
+								className='border pl-4 rounded'
+								key={name}
+							>
 								<legend className='block text-sm font-medium text-gray-700 mb-1'>
 									{label}
 								</legend>
@@ -187,20 +192,24 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 					</fieldset>
 
 					{/* Кнопки */}
-					<div className='flex justify-end space-x-2'>
-						<button
-							type='button'
-							onClick={onCloseAction}
-							className='px-4 py-2 border rounded hover:bg-gray-100'
-						>
-							Отмена
-						</button>
-						<button
-							type='submit'
-							className='px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
-						>
-							Сохранить
-						</button>
+					<div className='flex justify-between space-x-2'>
+						<DeleteProductButton productId={product.id} />
+
+						<div className={'flex gap-x-5'}>
+							<button
+								type='button'
+								onClick={onCloseAction}
+								className='px-4 py-2 border rounded hover:bg-gray-100'
+							>
+								Отмена
+							</button>
+							<button
+								type='submit'
+								className='px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
+							>
+								Сохранить
+							</button>
+						</div>
 					</div>
 				</form>
 			</div>
