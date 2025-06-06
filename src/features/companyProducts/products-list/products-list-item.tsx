@@ -12,6 +12,7 @@ import ProductModalEdit from './ProductModalEdit'
 type Props = { product: Product }
 
 export function ProductsListItem({ product }: Props) {
+	console.log(product.thumbnail)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [thumbnail, setThumbnail] = useState(product.thumbnail)
 
