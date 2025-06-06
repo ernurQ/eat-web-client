@@ -1,36 +1,10 @@
-import { uniq } from 'lodash'
-
 import { sleep } from '@/shared/lib/sleep'
 import { PaginationParams } from '@/shared/types/pagination.types'
 
-import type { GetProducts } from '@/entities/products/api/types'
 import { mockProducts } from '@/entities/products/mock-data'
 import type { Product } from '@/entities/products/product-types'
 
 export const productsApi = {
-	getProducts: async ({
-		name = '',
-		category = '',
-		offset = 0,
-		limit = 8
-	}: GetProducts = {}): Promise<Product[]> => {
-		await sleep(1000)
-		return mockProducts
-			.filter((product) =>
-				product.name.toLowerCase().includes(name?.toLowerCase())
-			)
-			.filter((product) =>
-				product.category.toLowerCase().includes(category?.toLowerCase())
-			)
-			.slice(offset, offset + limit)
-	},
-
-	getCategories: async (): Promise<string[]> => {
-		await sleep(700)
-		const categories = mockProducts.map((product) => product.category)
-		return uniq(categories)
-	},
-
 	getFavorites: async ({
 		offset = 0,
 		limit = 8
