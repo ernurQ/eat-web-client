@@ -8,6 +8,7 @@ import { BranchThumbnailSection } from '@/app/owner/account/_ui/branch-thumbnail
 import { ChangeableDataSection } from '@/app/owner/account/_ui/changeable-data-section'
 import { ContactsSection } from '@/app/owner/account/_ui/contacts-section'
 import { UnchangeableDataSection } from '@/app/owner/account/_ui/unchangeable-data-section'
+import LogoutSection from '@/app/me/ui/logout-section'
 
 export default function CompanyAccountPage() {
 	const { isPending } = useQuery(sellerBranchInfoOptions())
@@ -30,6 +31,8 @@ export default function CompanyAccountPage() {
 						<ChangeableDataSection />
 
 						<ContactsSection />
+
+						<LogoutSection />
 					</>
 				)}
 			</div>

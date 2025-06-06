@@ -4,12 +4,12 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Button, Layout, Menu } from 'antd'
 import { usePathname } from 'next/navigation'
 import { PropsWithChildren, useState } from 'react'
-
-import { menuItems } from '@/app/admin/_ui/admin-sider/menu-items'
+import { useMenuItems } from './menu-items'
 
 const { Sider, Content, Header } = Layout
 
 export function AdminSider({ children }: PropsWithChildren) {
+	const menuItems = useMenuItems()
 	const [collapsed, setCollapsed] = useState(false)
 	const currentKey = usePathname()
 

@@ -8,6 +8,7 @@ import {
 	addContactOptions,
 	invalidateSellerBranchInfoQuery
 } from '@/entities/branch'
+import { FileAddOutlined } from '@ant-design/icons'
 
 type AddContactInputs = Partial<Omit<BranchContact, 'id' | 'branchId'>>
 
@@ -50,9 +51,9 @@ export function AddContactButton() {
 			<button
 				onClick={() => setIsModalOpen(true)}
 				type='button'
-				className='py-1 px-2 bg-green-600 hover:bg-green-700 text-white text-base rounded-xl
-                       shadow-md transition disabled:opacity-50'
+				className='flex gap-3 mt-4 bg-green-600 hover:bg-green-700 transition-colors duration-200 rounded-full px-3 py-2 text-white'
 			>
+				<FileAddOutlined />
 				Добавить контакт
 			</button>
 
