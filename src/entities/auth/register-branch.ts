@@ -35,7 +35,7 @@ export function registerBranchOptions() {
 		}) =>
 			api
 				.post<ResponseData>(
-					'/auth/sellers/register ',
+					'/auth/sellers/register',
 					{
 						name,
 						bin,
