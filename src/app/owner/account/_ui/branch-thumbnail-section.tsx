@@ -34,7 +34,7 @@ export function BranchThumbnailSection() {
 						src={
 							isThumbnailError
 								? '/images/placeholder/branch-thumbnail.png'
-								: data!.thumbnail
+								: data?.thumbnail || ''
 						}
 						onError={() => setIsThumbnailError(true)}
 						alt={`Логотип`}
