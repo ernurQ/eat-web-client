@@ -60,7 +60,7 @@ export function Navbar() {
 
 					{data?.user.name ? (
 						<span className='hidden lg:inline text-green-700 font-medium truncate max-w-xs'>
-							{data.user.name}
+							{data.user.branchName}
 						</span>
 					) : (
 						<Link

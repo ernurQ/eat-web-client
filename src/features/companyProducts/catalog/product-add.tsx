@@ -1,9 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
+import { categoriesQueryOptions } from '@/entities/category'
 import {
 	addProductOptions,
 	invalidateOwnerProductsQuery
@@ -65,6 +66,22 @@ export default function ProductAdd() {
 		price > 0 ? Math.round(((price - discountPrice) / price) * 100) : 0
 	const isValidDiscount = discountPercent > 0 && discountPercent < 100
 
+	const thumbnailFileList = watch('thumbnail') // FileList or undefined
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
+	useEffect(() => {
+		if (thumbnailFileList?.[0]) {
+			const file = thumbnailFileList[0]
+			const objectUrl = URL.createObjectURL(file)
+			setPreviewUrl(objectUrl)
+
+			return () => URL.revokeObjectURL(objectUrl) // cleanup when unmounted or file changes
+		}
+		setPreviewUrl(null)
+	}, [thumbnailFileList])
+
+	const { data: categories = [] } = useQuery(categoriesQueryOptions())
+
 	return (
 		<div className='p-4'>
 			<button
@@ -95,9 +112,9 @@ export default function ProductAdd() {
 									htmlFor='imageFile'
 									className='relative w-full h-48 border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50'
 								>
-									{watch('thumbnail')?.length !== 0 ? (
+									{previewUrl ? (
 										<Image
-											src={'/images/placeholder/product-thumbnail.jpg'}
+											src={previewUrl}
 											alt='Preview'
 											className='object-contain h-full'
 											fill
@@ -137,18 +154,29 @@ export default function ProductAdd() {
 
 								<div>
 									<label className='block text-sm mb-1'>Категория</label>
-									<input
+									<select
 										{...register('categoryName', { required: true })}
 										className='w-full border rounded px-3 py-2'
 										required
-									/>
+									>
+										<option value=''>-- Выберите категорию --</option>
+
+										{categories.map((category) => (
+											<option
+												key={category.id}
+												value={category.name}
+											>
+												{category.name}
+											</option>
+										))}
+									</select>
 								</div>
 
 								<div>
 									<label className='block text-sm mb-1'>Дата истечения</label>
 									<input
 										{...register('expirationDate', { required: true })}
-										type='date'
+										type='datetime-local'
 										className='w-full border rounded px-3 py-2'
 									/>
 								</div>

@@ -16,13 +16,12 @@ type ListItemProps = {
 }
 
 export function ProductsListItem({ product }: ListItemProps) {
-	const { id, thumbnail, name, discountPrice, price, quantity, maxQuantity } =
+	const { id, thumbnail, name, discountPrice, quantity: maxQuantity, quantityInCart } =
 		product
 
-	const [initQuantity, setInitQuantity] = useState(quantity)
-	const totalPrice = discountPrice
-		? discountPrice * initQuantity
-		: price * initQuantity
+	console.log(product);
+
+	const [initQuantity, setInitQuantity] = useState(quantityInCart)
 	return (
 		<li
 			className={cn(
@@ -61,7 +60,7 @@ export function ProductsListItem({ product }: ListItemProps) {
 				/>
 				<div className={'flex justify-between mt-3 w-48 sm:mt-20'}>
 					Итого:
-					<span className={'text-[#F7C04F] font-bold'}>{totalPrice}</span>
+					<span className={'text-[#F7C04F] font-bold'}>{Number(discountPrice) * initQuantity}</span>
 				</div>
 			</div>
 		</li>

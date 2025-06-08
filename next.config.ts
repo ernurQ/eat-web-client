@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'http',
-				hostname: 'localhost',
+				hostname: '67.207.69.179',
 				port: '',
 				pathname: '/**'
 			}
@@ -15,8 +15,8 @@ const nextConfig: NextConfig = {
 		if (process.env.NODE_ENV === 'development') {
 			return [
 				{
-					source: '/backend-api/:path*',
-					destination: 'http://localhost/api/:path*'
+					source: '/api/:path*',
+					destination: 'http://67.207.69.179/api/:path*'
 				}
 			]
 		}

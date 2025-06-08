@@ -39,6 +39,7 @@ export function ProductsListItem({ product, isFavorite }: Props) {
 							}
 							alt={product.name}
 							fill
+							unoptimized
 							priority
 							sizes={
 								'(max-width: 640px) 100vw, ' +
@@ -53,14 +54,15 @@ export function ProductsListItem({ product, isFavorite }: Props) {
 					<div className={'flex mt-2 justify-between text-base items-start'}>
 						<div className={'flex flex-wrap items-center gap-x-2'}>
 							<span className={'font-medium flex-wrap'}>{product.name}</span>
-							<div className={'h-1 w-1 rounded-full bg-[#228536]'} />
-
+							<span className={'flex-wrap text-sm'}>
+								{product.categoryName}
+							</span>
 							{product.branchId && (
 								<Link
 									href={routes.branch.profile(product.branchId)}
 									className={'text-[#228536]'}
 								>
-									{product.branchName}
+									{product.branchName} + Location
 								</Link>
 							)}
 						</div>

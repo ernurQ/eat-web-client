@@ -41,7 +41,7 @@ export function BranchThumbnailSection() {
 				<div>
 					<label
 						htmlFor='logo'
-						className='inline-block px-5 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-lg cursor-pointer transition'
+						className='inline-block px-5 py-2 bg-yellow-500 hover:bg-yellow-400 text-white font-semibold rounded-lg cursor-pointer transition'
 					>
 						Загрузить новый
 					</label>

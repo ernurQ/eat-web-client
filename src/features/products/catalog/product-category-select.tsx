@@ -44,21 +44,34 @@ export function ProductCategorySelect() {
 	return (
 		<ul
 			className={cn(
-				'mt-5 flex flex-wrap gap-x-10 gap-y-1 justify-center',
-				'sm:px-12 md:px-20 lg:px-32'
+				'mt-6 flex flex-wrap justify-center items-center',
+				'gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-2',
+				'px-4 sm:px-10 md:px-20 lg:px-32',
+				'border border-gray-200 rounded-full py-2'
 			)}
 		>
-			{categories?.map(({ id, name }) => (
-				<li key={id}>
+			{categories?.map(({ id, name }, index) => (
+				<li
+					key={id}
+					className='flex items-center'
+				>
 					<button
 						onClick={() => onCategoryClick(name)}
-						className={cn({
-							'text-[#BAD36E] underline underline-offset-8':
-								selectedCategory === name
-						})}
+						className={cn(
+							'text-sm md:text-base font-medium text-gray-600 hover:text-[#BAD36E]',
+							'transition-colors duration-200 ease-in-out',
+							'hover:underline underline-offset-8',
+							selectedCategory === name &&
+								'text-[#BAD36E] underline underline-offset-8 font-semibold'
+						)}
 					>
 						{name}
 					</button>
+
+					{/* | separator except after the last item */}
+					{index < categories.length - 1 && (
+						<span className='mx-2 text-gray-300'>|</span>
+					)}
 				</li>
 			))}
 		</ul>

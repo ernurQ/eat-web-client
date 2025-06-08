@@ -2,18 +2,18 @@
 
 import { debounce } from 'lodash'
 import { useSearchParams } from 'next/navigation'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 
 import { cn } from '@/shared/lib/classnames'
 import { useSetSearchParam } from '@/shared/lib/hooks/use-set-search-params'
-
 import {
 	CATALOG_PAGE,
 	CATALOG_PRODUCT_NAME
 } from '@/features/products/catalog/constants'
 
 export function ProductNameSearch() {
+	const [focused, setFocused] = useState(false)
 	const searchParams = useSearchParams()
 	const setSearchParam = useSetSearchParam()
 	const debounceDelay = 300
@@ -27,22 +27,32 @@ export function ProductNameSearch() {
 	}, debounceDelay)
 
 	return (
-		<div className={'sm:px-12 md:px-20 lg:px-32'}>
-			<div className={'relative flex'}>
-				<label className={'sr-only'}>product by name search</label>
-				<AiOutlineSearch
-					className={
-						'text-2xl absolute left-1 top-1/2 transform -translate-y-1/2 '
-					}
-				/>
+		<div className='flex justify-start py-4'>
+			<div
+				className={cn(
+					'relative transition-all duration-300',
+					focused ? 'w-80' : 'w-64'
+				)}
+			>
+				{focused && <AiOutlineSearch
+					className={cn(
+						'absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 transition-all duration-300',
+						focused && 'text-[#cddf95] scale-110'
+					)}
+				/>}
+
 				<input
 					onChange={onChange}
-					className={cn(
-						'border border-black block rounded-2xl min-w-64 max-w-80 flex-grow',
-						'ps-8 pe-3 h-8 text-sm'
-					)}
+					onFocus={() => setFocused(true)}
+					onBlur={() => setFocused(false)}
 					defaultValue={searchParams.get(CATALOG_PRODUCT_NAME) || ''}
-					placeholder={'Введите название продукта ....'}
+					placeholder='Введите название продукта'
+					className={cn(
+						`w-full border ${focused ? "pl-10" : "pl-4"} pr-4 py-2 rounded-full`,
+						'text-sm text-gray-800',
+						'focus:bg-white focus:ring-2 focus:ring-[#cddf95]',
+						'outline-none transition-all duration-300'
+					)}
 				/>
 			</div>
 		</div>

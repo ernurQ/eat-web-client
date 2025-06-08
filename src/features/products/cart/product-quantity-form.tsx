@@ -1,11 +1,5 @@
-import { debounce } from 'lodash'
-import { Dispatch, SetStateAction, useMemo } from 'react'
 
-import {
-	invalidateCartTotalPriceQuery,
-	useIsBuyCartProductsMutating,
-	useSetCartProductQuantityMutation
-} from '@/entities/cart'
+import { Dispatch, SetStateAction } from 'react'
 
 type Props = {
 	id: string
@@ -15,36 +9,20 @@ type Props = {
 }
 
 export function ProductQuantityForm({
-	id,
 	quantity,
 	setQuantity,
 	maxQuantity
 }: Props) {
-	const { mutate } = useSetCartProductQuantityMutation()
-	const isBuyCartProductsMutating = useIsBuyCartProductsMutating() !== 0
-
-	const debounceDelay = 500
-	const debouncedMutateQuantity = useMemo(
-		() =>
-			debounce((quantity: number) => {
-				mutate({ id, quantity })
-			}, debounceDelay),
-		[mutate, id]
-	)
 
 	const onDecrease = () =>
 		setQuantity((quantity) => {
-			invalidateCartTotalPriceQuery({ refetchType: 'none' }).then()
 			const newQuantity = quantity - 1
-			debouncedMutateQuantity(newQuantity)
 			return newQuantity
 		})
 
 	const onIncrease = () =>
 		setQuantity((quantity) => {
-			invalidateCartTotalPriceQuery({ refetchType: 'none' }).then()
 			const newQuantity = quantity + 1
-			debouncedMutateQuantity(newQuantity)
 			return newQuantity
 		})
 
@@ -58,7 +36,7 @@ export function ProductQuantityForm({
 			</label>
 			<button
 				onClick={onDecrease}
-				disabled={quantity <= 1 || isBuyCartProductsMutating}
+				disabled={quantity <= 1}
 				className={'h-6 w-6'}
 			>
 				-
@@ -71,7 +49,7 @@ export function ProductQuantityForm({
 			/>
 			<button
 				onClick={onIncrease}
-				disabled={quantity >= maxQuantity || isBuyCartProductsMutating}
+				disabled={quantity >= maxQuantity}
 				className={'h-6 w-6'}
 			>
 				+

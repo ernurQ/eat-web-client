@@ -4,6 +4,8 @@ import { api, queryClient } from '@/shared/api'
 
 import { meQueryOptions } from '@/entities/auth'
 
+import { backendUrl } from '../../shared/api/base'
+
 type Data = {
 	page: number
 	size: number
@@ -56,7 +58,7 @@ async function getProducts(data: Data) {
 			products: products.map(({ thumbnail, ...data }) => {
 				return {
 					...data,
-					thumbnail: `http://localhost/api/products/images/${(thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
+					thumbnail: `${backendUrl}/api/products/images/${(thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
 				}
 			}),
 			total

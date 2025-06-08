@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { api, queryClient } from '@/shared/api'
+import { api, backendUrl, queryClient } from '@/shared/api'
 
 type ResponseData = Array<{
 	id: string
@@ -21,7 +21,7 @@ export function listFavoritesOptions() {
 					products.map(({ thumbnail, ...data }) => {
 						return {
 							...data,
-							thumbnail: `http://localhost/api/products/images/${(thumbnail.at(-1) || '').split('/').slice(1).join('/')}`,
+							thumbnail: `${backendUrl}/api/products/images/${(thumbnail.at(-1) || '').split('/').slice(1).join('/')}`,
 							discountPrice: (data.price * (100 - data.discount)) / 100
 						}
 					})

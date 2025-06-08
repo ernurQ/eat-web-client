@@ -1,12 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Modal } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { routes } from '@/shared/config/routes'
 
 import { productInfoOptions } from '@/entities/products'
+import { addToCartOptions } from '@/entities/products/cart'
 
 type Props = {
 	productId: string
@@ -34,31 +36,73 @@ export function AddToCartButton({ productId }: Props) {
 				centered
 				width={600}
 			>
-				<AddToCartForm productId={productId} />
+				<AddToCartForm
+					productId={productId}
+					onClose={() => setIsModalOpen(false)}
+				/>
 			</Modal>
 		</>
 	)
 }
 
-function AddToCartForm({ productId }: Props) {
-	const [isThumbnailError, setIsThumbnailError] = useState(false)
-	const [quantity, setQuantity] = useState(1)
-	const handleDecrement = () => setQuantity((value) => value - 1)
-	const handleIncrement = () => setQuantity((value) => value + 1)
+function AddToCartForm({
+	productId,
+	onClose
+}: Props & { onClose: () => void }) {
+	const queryClient = useQueryClient()
+  const { data: product, isLoading: isProductLoading, isError: isProductError } =
+    useQuery(productInfoOptions({ productId }))
 
-	const { data, isPending, isError } = useQuery(
-		productInfoOptions({
-			productId
-		})
-	)
+  const [isThumbnailError, setIsThumbnailError] = useState(false)
+  const [quantity, setQuantity] = useState(1)
 
-	const onAddToCart = () => {}
+  const {
+		isPending,
+		isError,
+		error,
+		mutate: handleAddToCart
+	} = useMutation({	
+		...addToCartOptions(),
+		onMutate: () => {
+			toast.loading('Добавляем товар в корзину…', { id: 'add-to-cart' })
+		},
+		onSettled: () => {
+			toast.dismiss('add-to-cart')
+		},
+		onError: () => {
+			toast.error('Не удалось добавить в корзину', {
+				id: 'add-to-cart'
+			})
+		},
+		onSuccess: () => {
+			toast.success('Товар успешно добавлен!', { id: 'add-to-cart' })
+			queryClient.invalidateQueries({ queryKey: ['cart'] })
+			onClose()
+		}
+	})
+
+	if (isProductLoading) return <p>Загрузка товара…</p>
+	if (isProductError || !product) {
+		console.log(isProductError);
+		
+		return <p>Не удалось загрузить данные товара</p>
+	}
+
+	const handleDecrement = () => setQuantity((q) => Math.max(1, q - 1))
+	const handleIncrement = () =>
+		setQuantity((q) => Math.min(product.quantity, q + 1))
+
+	const onAddToCart = () => {
+		handleAddToCart({ productId, quantity })
+	}
 
 	if (isPending) {
 		return <p>Загрузка...</p>
 	}
 
 	if (isError) {
+		console.log(error);
+		
 		return <p>Что то пошло нет так</p>
 	}
 
@@ -70,7 +114,7 @@ function AddToCartForm({ productId }: Props) {
 						src={
 							isThumbnailError
 								? '/images/placeholder/product-thumbnail.jpg'
-								: data.thumbnail
+								: product.thumbnail
 						}
 						onError={() => setIsThumbnailError(true)}
 						alt={'Product thumbnail'}
@@ -80,19 +124,19 @@ function AddToCartForm({ productId }: Props) {
 					/>
 				</div>
 				<div className={'grow'}>
-					<h2 className='text-2xl font-bold'>{data.name}</h2>
+					<h2 className='text-2xl font-bold'>{product.name}</h2>
 					<Link
-						href={routes.branch.profile(data.branchId)}
+						href={routes.branch.profile(product.branchId)}
 						className='text-green-700 font-semibold'
 					>
-						{data.branchName}
+						{product.branchName}
 					</Link>
 					<p className='text-sm text-gray-600'>
-						Оставшееся количество: {data.quantity}
+						Оставшееся количество: {product.quantity}
 					</p>
 					<p className='text-sm text-gray-600'>
 						Истекает в:{' '}
-						{new Date(data.expirationDate).toLocaleString('ru-RU', {
+						{new Date(product.expirationDate).toLocaleString('ru-RU', {
 							year: 'numeric',
 							month: 'long',
 							day: 'numeric',
@@ -101,15 +145,15 @@ function AddToCartForm({ productId }: Props) {
 						})}
 					</p>
 
-					<p className='text-sm text-gray-600'>Цена: {data.price}</p>
+					<p className='text-sm text-gray-600'>Цена: {product.price}</p>
 					<p className='text-sm text-gray-600'>
-						Цена со скидкой: {data.discountPrice}
+						Цена со скидкой: {product.discountPrice}
 					</p>
 				</div>
 			</div>
 
-			<p className='text-gray-700 mt-5'>{data.description}</p>
-			<p>Состав: {data.composition}</p>
+			<p className='text-gray-700 mt-5'>{product.description}</p>
+			<p>Состав: {product.composition}</p>
 
 			<div className='flex justify-between items-center mt-5'>
 				<div className='flex items-center space-x-4'>
@@ -123,7 +167,7 @@ function AddToCartForm({ productId }: Props) {
 					<span className='font-semibold w-6 text-center'>{quantity}</span>
 					<button
 						onClick={handleIncrement}
-						disabled={quantity >= data.quantity}
+						disabled={quantity >= product.quantity}
 						className={
 							'px-3 py-1 rounded bg-yellow-500 hover:bg-yellow-600 text-white'
 						}
@@ -135,7 +179,7 @@ function AddToCartForm({ productId }: Props) {
 				<p className={'text-base'}>
 					Итоговая цена:{' '}
 					<span className={'text-lg text-yellow-700'}>
-						{quantity * data.discountPrice}
+						{quantity * product.discountPrice}
 					</span>
 				</p>
 

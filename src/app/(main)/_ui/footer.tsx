@@ -10,6 +10,7 @@ import { SubscribeNewsForm } from '@/features/users/subscribe-news-form'
 export function Footer() {
 	return (
 		<footer
+		id='footer'
 			className={cn(
 				'flex flex-wrap justify-around bg-[#fce1ab] py-10 gap-5',
 				'text-xs px-2 md:flex-row-reverse'

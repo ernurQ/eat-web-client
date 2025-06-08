@@ -9,7 +9,10 @@ type Data = {
 	branchName: string
 	email: string
 	password: string
+	city: string
 	location: string
+	latitude: string
+	longitude: string
 	document: File
 }
 
@@ -24,7 +27,10 @@ export function registerBranchOptions() {
 			branchName,
 			email,
 			password,
+			city,
 			location,
+			latitude,
+			longitude,
 			document
 		}) =>
 			api
@@ -37,7 +43,10 @@ export function registerBranchOptions() {
 						branchName,
 						email,
 						password,
+						city,
 						location,
+						latitude,
+						longitude,
 						document
 					},
 					{

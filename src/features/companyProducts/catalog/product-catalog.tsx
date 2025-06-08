@@ -11,7 +11,7 @@ import { Header } from '@/shared/ui/header'
 import { listOwnerProductsOptions } from '@/entities/products'
 
 import ProductAdd from '@/features/companyProducts/catalog/product-add'
-import { ProductCategorySelect } from '@/features/companyProducts/catalog/product-category-select'
+import { ProductCategorySelect } from '@/features/products/catalog/product-category-select'
 import { ProductNameSearch } from '@/features/companyProducts/catalog/product-name-search'
 import { ProductsList } from '@/features/companyProducts/products-list'
 

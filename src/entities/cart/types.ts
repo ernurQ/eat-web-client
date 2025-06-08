@@ -1,10 +1,10 @@
-import { Product } from '@/entities/products/product-types'
-
-export interface CartProduct extends Product {
+export interface CartProduct {
 	id: string
-	thumbnail: string
 	name: string
+	thumbnail: string
 	price: number
+	discountPrice: number
 	quantity: number
-	maxQuantity: number
+	totalPrice: number
+	quantityInCart: number
 }

@@ -48,7 +48,7 @@ export function Navbar() {
 						pathname={pathname}
 					/>
 					<NavItem
-						href={routes.contacts()}
+						href="#footer"
 						label='Контакты'
 						pathname={pathname}
 					/>

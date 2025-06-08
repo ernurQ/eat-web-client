@@ -6,4 +6,5 @@ export type ListItem = Pick<
 > & {
 	branchId?: string
 	branchName?: string
+	categoryName?: string
 }

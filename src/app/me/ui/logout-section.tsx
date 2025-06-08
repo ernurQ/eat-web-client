@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { routes } from '@/shared/config/routes'
 import { tokenService } from '@/shared/lib/token-service'
 import { LogoutOutlined } from '@ant-design/icons'
+import { queryClient } from '@/shared/api'
 
 export default function LogoutSection({value='Выйти с аккаунта'}) {
 	const router = useRouter()
@@ -13,6 +14,7 @@ export default function LogoutSection({value='Выйти с аккаунта'}) 
 		setIsLoggingOut(true)
 		try {
 			tokenService.clearAccessToken()
+			queryClient.clear()
 			router.push(routes.auth.loginUser())
 		} catch (error) {
 			console.log('logout failed', error)

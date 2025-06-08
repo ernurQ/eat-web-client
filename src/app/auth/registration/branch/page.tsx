@@ -14,13 +14,19 @@ type RegisterBranchInputs = {
 	branchName: string
 	email: string
 	password: string
+	city: string
 	location: string
 	documentsList?: FileList
 }
 
 export default function RegisterBranchPage() {
-	const { register, handleSubmit, watch, resetField } =
-		useForm<RegisterBranchInputs>()
+	const {
+		register,
+		handleSubmit,
+		watch,
+		resetField,
+		formState: { errors }
+	} = useForm<RegisterBranchInputs>()
 
 	const { mutate: registerBranch } = useMutation({
 		...registerBranchOptions(),
@@ -34,34 +40,70 @@ export default function RegisterBranchPage() {
 			toast.error('Что-то пошло не так')
 		},
 		onSuccess: () => {
-			toast.success('Компания успешно зарегистрирована')
+			toast.success('Успешно отправлен запрос')
 		}
 	})
 
-	function onRegisterBranch({ documentsList, ...data }: RegisterBranchInputs) {
-		const document = documentsList?.item(0)
-		if (!document) return
-		registerBranch({ ...data, document })
+	async function onRegisterBranch({
+		documentsList,
+		city,
+		branchName,
+		location,
+		...data
+	}: RegisterBranchInputs) {
+		const file = documentsList?.item(0)
+		if (!file) return
+
+		const input = `${city}, ${branchName}, ${location}`
+
+		const resp = await fetch('/api/place', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ input })
+		})
+		const placeJson = await resp.json()
+
+		if (placeJson.status !== 'OK' || !placeJson.candidates?.length) {
+			toast.error('Не удалось найти заведение — проверьте адрес')
+			return
+		}
+
+		const candidate = placeJson.candidates[0]
+		const { lat, lng } = candidate.geometry.location as {
+			lat: number
+			lng: number
+		}
+		const formatted = candidate.formatted_address || candidate.name
+
+		registerBranch({
+			...data,
+			document: file,
+			city,
+			branchName,
+			location: formatted,
+			latitude: lat.toString(),
+			longitude: lng.toString()
+		})
 	}
 
-	const document = watch('documentsList')?.item(0)
+	const documentFile = watch('documentsList')?.item(0)
 	function removeDocument() {
 		resetField('documentsList')
 	}
 	function validateDocument(fileList?: FileList) {
 		if (!fileList || fileList.length === 0) {
-			return 'Please select a PDF file'
+			return 'Пожалуйста, выберите PDF-файл'
 		}
 
 		const file = fileList[0]
 
 		if (file.type !== 'application/pdf') {
-			return 'Only PDF files are allowed'
+			return 'Разрешены только PDF-файлы'
 		}
 
-		const maxSize = 10 * 1024 * 1024 // 10MB in bytes
+		const maxSize = 10 * 1024 * 1024
 		if (file.size > maxSize) {
-			return 'File size must be less than 10MB'
+			return 'Размер файла должен быть не более 10 МБ'
 		}
 
 		return true
@@ -78,6 +120,15 @@ export default function RegisterBranchPage() {
 					type='text'
 					className='border-b border-gray-300 w-full px-2 py-1 focus:outline-none focus:border-green-600'
 					placeholder='Название компании'
+				/>
+			</div>
+
+			<div>
+				<input
+					{...register('city', { required: true })}
+					type='text'
+					className='border-b border-gray-300 w-full px-2 py-1 focus:outline-none focus:border-green-600'
+					placeholder='Город'
 				/>
 			</div>
 
@@ -143,18 +194,22 @@ export default function RegisterBranchPage() {
 					Загрузить документ
 				</label>
 				<input
-					{...register('documentsList', {
-						validate: validateDocument
-					})}
-					accept='.pdf,application/pdf'
+					{...register('documentsList', { validate: validateDocument })}
+					accept='.pdf'
 					id='file'
 					type='file'
 					className='hidden'
 				/>
+				{errors.documentsList && (
+					<p className='text-red-500 text-sm mt-1'>
+						{errors.documentsList.message}
+					</p>
+				)}
 			</div>
-			{document && (
-				<div className='flex gap-4'>
-					<p className='font-medium'>{document.name}</p>
+
+			{documentFile && (
+				<div className='flex gap-4 items-center'>
+					<p className='font-medium'>{documentFile.name}</p>
 					<button
 						type='button'
 						onClick={removeDocument}

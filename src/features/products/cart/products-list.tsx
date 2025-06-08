@@ -1,18 +1,18 @@
 import { cn } from '@/shared/lib/classnames'
 
-import { useCartProductsQuery } from '@/entities/cart'
-
 import { ProductsListItem } from '@/features/products/cart/products-list-item'
+import { useQuery } from '@tanstack/react-query'
+import { getCartOptions } from '@/entities/cart/get-cart'
 
 export function ProductsList() {
-	const { data: products, isPending, isError } = useCartProductsQuery()	
+	const { data: products, isPending, isError } = useQuery(getCartOptions())
 
 	if (isPending) return <Skeleton />
 	if (isError) throw Error('feature.cart.product-list')
 
 	return (
 		<ul className={'border-b-[1px] border-b-black px-4 mt-10'}>
-			{products.map((product) => (
+			{products.products.map((product) => (
 				<ProductsListItem
 					key={product.id}
 					product={product}

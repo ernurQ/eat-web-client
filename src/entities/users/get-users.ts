@@ -9,6 +9,7 @@ type Data = {
 	size: number
 	name?: string
 	surname?: string
+	email?: string
 	role?: UserRole
 }
 

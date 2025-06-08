@@ -15,6 +15,7 @@ import { ChangeUserRoleButton } from '@/features/users/change-user-role-button'
 const usersPageKey = 'users-page'
 const usersNameKey = 'user-name'
 const usersSurnameKey = 'user-surname'
+const usersEmailKey = 'user-email'
 const usersRoleKey = 'user-role'
 const usersChangeRoleKey = 'change-user-role'
 const usersPageSize = 10
@@ -23,6 +24,7 @@ type DataType = {
 	key: string
 	[usersNameKey]: string
 	[usersSurnameKey]: string
+	[usersEmailKey]: string
 	[usersRoleKey]: UserRole
 	[usersChangeRoleKey]: {
 		id: string
@@ -39,6 +41,7 @@ export function UsersTable() {
 	const page = parseInt(searchParams.get(usersPageKey) || '1', 10)
 	const name = searchParams.get(usersNameKey) || undefined
 	const surname = searchParams.get(usersSurnameKey) || undefined
+	const email = searchParams.get(usersEmailKey) || undefined
 	const roleParam = searchParams.get(usersRoleKey) || undefined
 	const role =
 		roleParam === 'customer' || roleParam === 'seller' || roleParam === 'admin'
@@ -51,6 +54,7 @@ export function UsersTable() {
 			size: usersPageSize,
 			name,
 			surname,
+			email,
 			role
 		})
 	)
@@ -82,6 +86,17 @@ export function UsersTable() {
 			...getColumnSearchProps(
 				usersSurnameKey,
 				surname || '',
+				handleSearch,
+				handleReset
+			)
+		},
+		{
+			title: 'Почта',
+			dataIndex: usersEmailKey,
+			key: usersEmailKey,
+			...getColumnSearchProps(
+				usersEmailKey,
+				email || '',
 				handleSearch,
 				handleReset
 			)
@@ -131,10 +146,11 @@ export function UsersTable() {
 			dataSource={
 				isPending
 					? []
-					: data.users.map(({ id, name, surname, role }) => ({
+					: data.users.map(({ id, name, surname, email, role }) => ({
 							key: id,
 							[usersNameKey]: name,
 							[usersSurnameKey]: surname,
+							[usersEmailKey]: email,
 							[usersRoleKey]: role,
 							[usersChangeRoleKey]: { id: id, currentRole: role }
 						}))

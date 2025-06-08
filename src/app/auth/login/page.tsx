@@ -3,8 +3,10 @@
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { IoEye, IoEyeOff } from 'react-icons/io5'
 
 import { routes } from '@/shared/config/routes'
 
@@ -17,6 +19,7 @@ type LoginInputs = {
 
 export default function LoginPage() {
 	const router = useRouter()
+	const [showPassword, setShowPassword] = useState(false)
 
 	const { handleSubmit, register } = useForm<LoginInputs>()
 
@@ -36,9 +39,15 @@ export default function LoginPage() {
 				router.push(routes.admin.registerBranchRequests())
 			}
 			if (data.user.user.role === 'customer') {
+				toast.success(
+					`Добро пожаловать, ${data.user.user.name} ${data.user.user.surname}`
+				)
 				router.push(routes.catalog())
 			}
 			if (data.user.user.role === 'seller') {
+				toast.success(
+					`Добро пожаловать, ${data.user.user.name} ${data.user.user.surname}`
+				)
 				router.push(routes.ownerAccount())
 			}
 		}
@@ -80,6 +89,7 @@ export default function LoginPage() {
 					onSubmit={handleSubmit(onLogin)}
 					className='flex flex-col gap-4'
 				>
+					{/* Email */}
 					<div>
 						<label
 							htmlFor='email'
@@ -97,7 +107,8 @@ export default function LoginPage() {
 						/>
 					</div>
 
-					<div>
+					{/* Password with toggle */}
+					<div className='relative'>
 						<label
 							htmlFor='password'
 							className='block text-gray-700 mb-1'
@@ -107,13 +118,22 @@ export default function LoginPage() {
 						<input
 							{...register('password', { required: true })}
 							id='password'
-							type='password'
-							className='border-b border-gray-300 w-full px-2 py-1 focus:outline-none focus:border-green-600'
+							type={showPassword ? 'text' : 'password'}
+							className='border-b border-gray-300 w-full px-2 py-1 pr-10 focus:outline-none focus:border-green-600'
 							placeholder='Введите пароль'
 							required
 						/>
+						<button
+							type='button'
+							onClick={() => setShowPassword((v) => !v)}
+							className='absolute top-8 right-2 text-gray-500 hover:text-gray-700'
+							tabIndex={-1}
+						>
+							{showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+						</button>
 					</div>
 
+					{/* Forgot password */}
 					<div className='text-right text-sm text-gray-500'>
 						<a
 							href='#'
@@ -123,6 +143,7 @@ export default function LoginPage() {
 						</a>
 					</div>
 
+					{/* Submit */}
 					<button
 						type='submit'
 						className='bg-[#BAD36E] text-white py-2 rounded font-semibold hover:bg-[#90a553] transition-colors'

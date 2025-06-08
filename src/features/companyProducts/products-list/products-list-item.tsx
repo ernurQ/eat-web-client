@@ -24,6 +24,21 @@ export function ProductsListItem({ product }: Props) {
 		return 0
 	}, [product.price, product.discountPrice])
 
+	function formatDateToRussianLocal(isoString: string): string {
+		const date = new Date(isoString)
+
+		const month = date.toLocaleString('ru-RU', {
+			month: 'long' // локальное время, без UTC
+		})
+		const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1)
+
+		const hours = date.getHours().toString().padStart(2, '0')
+		const minutes = date.getMinutes().toString().padStart(2, '0')
+
+		const formattedDate = `${date.getDate()} ${capitalizedMonth} ${hours}:${minutes}`
+		return formattedDate
+	}
+
 	return (
 		<>
 			<li
@@ -68,8 +83,14 @@ export function ProductsListItem({ product }: Props) {
 					>
 						Изменить
 					</button>
-					<div className='flex'>
-						<span>Оставшееся количество: {product.quantity}</span>
+					<div className='flex flex-col'>
+						<span>
+							Оставшееся количество:{' '}
+							<b className='text-yellow-500'>{product.quantity}</b>
+						</span>
+						<span>
+							Истекает в <b className='text-yellow-500'>{formatDateToRussianLocal(product.expirationDate)}</b>
+						</span>
 						<Price
 							price={product.price}
 							discountedPrice={product.discountPrice}
