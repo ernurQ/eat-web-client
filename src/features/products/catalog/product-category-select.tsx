@@ -44,7 +44,7 @@ export function ProductCategorySelect() {
 	return (
 		<ul
 			className={cn(
-				'mt-6 flex flex-wrap justify-center items-center',
+				'w-full mt-6 flex flex-wrap justify-start items-center',
 				'gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-2',
 				'px-4 sm:px-10 md:px-20 lg:px-32',
 				'border border-gray-200 rounded-full py-2'

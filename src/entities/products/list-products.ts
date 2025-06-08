@@ -19,11 +19,15 @@ type ResponseData = {
 		id: string
 		branchId: string
 		branchName: string
+		branchLocation: string
+		branchLocationGeo: {
+			coordinates: number[]
+		}
 		categoryName: string
 		name: string
 		description: string
-		thumbnail: Array<string>
-		price: number
+		thumbnail: string[]
+		price: string
 		discountPrice: number
 		quantity: number
 		expirationDate: string

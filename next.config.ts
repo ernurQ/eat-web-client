@@ -9,12 +9,12 @@ const nextConfig: NextConfig = {
 				port: '',
 				pathname: '/**'
 			},
-			// {
-			// 	protocol: 'http',
-			// 	hostname: 'api.eatweb.food',
-			// 	port: '',
-			// 	pathname: '/**'
-			// }
+			{
+				protocol: 'https',
+				hostname: 'api.eatweb.food',
+				port: '',
+				pathname: '/**'
+			}
 		]
 	},
 	async rewrites() {

@@ -8,4 +8,7 @@ export type ListItem = Pick<
 	branchName?: string
 	branchLocation?: string
 	categoryName?: string
+	branchLocationGeo?: {
+		coordinates: [number, number] // [lng, lat]
+	}
 }
