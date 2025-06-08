@@ -9,6 +9,7 @@ import {
 	getCartOptions,
 	invalidateGetCartQuery
 } from '@/entities/cart/get-cart'
+import { invalidateProductInfoQuery } from '@/entities/products'
 
 export function BuyCartProductsButton() {
 	const { data: products, isPending } = useQuery(getCartOptions())
@@ -17,6 +18,7 @@ export function BuyCartProductsButton() {
 		mutationFn: () => buyCartProducts(),
 		onSuccess: async () => {
 			await invalidateGetCartQuery()
+			await invalidateProductInfoQuery()
 		}
 	})
 
