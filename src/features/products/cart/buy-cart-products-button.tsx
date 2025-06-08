@@ -10,6 +10,7 @@ import {
 	getCartOptions,
 	invalidateGetCartQuery
 } from '@/entities/cart/get-cart'
+import { createOrder } from '@/entities/orders'
 import { invalidateProductInfoQuery } from '@/entities/products'
 
 export function BuyCartProductsButton() {
@@ -21,6 +22,8 @@ export function BuyCartProductsButton() {
 		onSuccess: async ({ paymentUrl }) => {
 			await invalidateGetCartQuery()
 			await invalidateProductInfoQuery()
+
+			await createOrder()
 			router.push(paymentUrl)
 		}
 	})
