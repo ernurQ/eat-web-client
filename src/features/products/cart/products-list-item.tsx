@@ -19,8 +19,6 @@ export function ProductsListItem({ product }: ListItemProps) {
 	const { id, thumbnail, name, discountPrice, quantity: maxQuantity, quantityInCart } =
 		product
 
-	console.log(product);
-
 	const [initQuantity, setInitQuantity] = useState(quantityInCart)
 	return (
 		<li

@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { api, backendUrl } from '@/shared/api'
+import { api, backendUrl, queryClient } from '@/shared/api'
 
 type Data = {
 	productId: string
@@ -39,5 +39,11 @@ export function productInfoOptions(data: Data) {
 				...res.data,
 				thumbnail: `${backendUrl}/api/products/images/${(res.data.thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
 			}))
+	})
+}
+
+export async function invalidateProductInfoQuery() {
+	await queryClient.invalidateQueries({
+		queryKey: ['product-info']
 	})
 }
