@@ -10,6 +10,7 @@ type Props = {
 	className?: string
 	gridColNum?: number
 	isFavoriteProducts?: boolean
+	location?: { lat: number; lng: number }
 }
 
 export function ProductsList({
@@ -17,7 +18,8 @@ export function ProductsList({
 	products,
 	className,
 	gridColNum = 6,
-	isFavoriteProducts
+	isFavoriteProducts,
+	location
 }: Props) {
 	if (isPending) return <Skeleton className={className} />
 	if (!products) throw Error('products prop is undefined')
@@ -35,6 +37,7 @@ export function ProductsList({
 					key={product.id}
 					isFavorite={isFavoriteProducts}
 					product={product}
+					location={location}
 				/>
 			))}
 		</ul>

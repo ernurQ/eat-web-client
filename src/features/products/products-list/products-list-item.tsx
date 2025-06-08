@@ -10,11 +10,14 @@ import { cn } from '@/shared/lib/classnames'
 import { AddToCartButton } from '@/features/products/products-list/add-to-cart-buttton'
 import { AddToFavoritesButton } from '@/features/products/products-list/add-to-favorites-button'
 
+import { getDistance } from '../catalog/get-distance'
+
 import { ListItem } from './types'
 
 type Props = {
 	product: ListItem
 	isFavorite?: boolean
+	location?: { lat: number; lng: number }
 }
 
 type PriceProps = {
@@ -22,8 +25,19 @@ type PriceProps = {
 	discountedPrice: number
 }
 
-export function ProductsListItem({ product, isFavorite }: Props) {
+export function ProductsListItem({ product, isFavorite, location }: Props) {
 	const [thumbnail, setThumbnail] = useState(product.thumbnail)
+	const distance =
+		location &&
+		product.branchLocationGeo?.coordinates &&
+		product.branchLocationGeo.coordinates.length === 2
+			? getDistance(
+					location.lat,
+					location.lng,
+					product.branchLocationGeo.coordinates[1],
+					product.branchLocationGeo.coordinates[0]
+				)
+			: null
 
 	return (
 		<>
@@ -51,16 +65,28 @@ export function ProductsListItem({ product, isFavorite }: Props) {
 						/>
 					</div>
 
-					<div className={'flex mt-2 justify-between text-base items-start'}>
-						<div className={'flex flex-wrap items-center gap-x-2'}>
-							<span className={'font-medium flex-wrap'}>{product.name}</span>
-							<span className={'flex-wrap text-sm'}>
-								{product.categoryName}
-							</span>
+					<div className='flex mt-3 justify-between items-start gap-2 text-sm sm:text-base'>
+						<div className='flex flex-col gap-1 max-w-[75%]'>
+							<h3 className='font-semibold leading-tight text-gray-800 line-clamp-2 break-words'>
+								{product.name}
+							</h3>
+
+							{product.categoryName && (
+								<span className='text-gray-500 text-xs sm:text-sm'>
+									{product.categoryName}
+								</span>
+							)}
+
+							{distance !== null && (
+								<span className='text-gray-400 text-xs sm:text-sm'>
+									{distance.toFixed(2)} км от вас
+								</span>
+							)}
+
 							{product.branchId && (
 								<Link
 									href={routes.branch.profile(product.branchId)}
-									className={'text-[#228536] text-xs'}
+									className='text-green-600 hover:underline text-xs sm:text-sm'
 								>
 									{product.branchName}, {product.branchLocation}
 								</Link>
