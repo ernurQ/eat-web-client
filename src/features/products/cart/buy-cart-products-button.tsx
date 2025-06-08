@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
 import { cn } from '@/shared/lib/classnames'
 
@@ -12,13 +13,15 @@ import {
 import { invalidateProductInfoQuery } from '@/entities/products'
 
 export function BuyCartProductsButton() {
+	const router = useRouter()
 	const { data: products, isPending } = useQuery(getCartOptions())
 
 	const { mutate, isPending: isBuyCartPending } = useMutation({
 		mutationFn: () => buyCartProducts(),
-		onSuccess: async () => {
+		onSuccess: async ({ paymentUrl }) => {
 			await invalidateGetCartQuery()
 			await invalidateProductInfoQuery()
+			router.push(paymentUrl)
 		}
 	})
 

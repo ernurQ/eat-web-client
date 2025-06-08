@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import {
 	invalidateSellerBranchInfoQuery,
@@ -11,6 +11,8 @@ import {
 } from '@/entities/branch'
 
 export function BranchThumbnailSection() {
+	const [isThumbnailError, setIsThumbnailError] = useState(false)
+
 	const handleLogoChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.item(0)
 		if (file) {
@@ -29,7 +31,12 @@ export function BranchThumbnailSection() {
 			<div className='flex items-center space-x-6'>
 				<div className='w-24 h-24 rounded-lg overflow-hidden border-2 border-dashed border-green-300 relative'>
 					<Image
-						src={data?.thumbnail || '/images/placeholder/branch-thumbnail.png'}
+						src={
+							isThumbnailError
+								? '/images/placeholder/branch-thumbnail.png'
+								: data!.thumbnail
+						}
+						onError={() => setIsThumbnailError(true)}
 						alt={`Логотип`}
 						fill
 						sizes={'300px'}

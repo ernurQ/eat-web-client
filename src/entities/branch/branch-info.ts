@@ -34,7 +34,7 @@ export function branchInfoQueryOptions(data: Data) {
 		queryFn: () =>
 			api.get<ResponseData>(`/branches/${id}`).then((res) => ({
 				...res.data.branch,
-				thumbnail: `${backendUrl}/api/products/images/${(res.data.branch.thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
+				thumbnail: `${backendUrl}/api${res.data.branch.thumbnail}`
 			}))
 	})
 }
@@ -53,7 +53,7 @@ export function sellerBranchInfoOptions() {
 			const response = await api.get<ResponseData>(`/branches/${branchId}`)
 			return {
 				...response.data.branch,
-				thumbnail: `${backendUrl}/api/products/images/${(response.data.branch.thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
+				thumbnail: `${backendUrl}/api${response.data.branch.thumbnail}`
 			}
 		}
 	})

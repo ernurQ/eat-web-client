@@ -9,6 +9,7 @@ import { cn } from '@/shared/lib/classnames'
 
 import { CartProduct } from '@/entities/cart/types'
 
+import { DeleteProductFromCartButton } from '@/features/cart/delete-product-from-cart-button'
 import { ProductQuantityForm } from '@/features/products/cart/product-quantity-form'
 
 type ListItemProps = {
@@ -16,8 +17,15 @@ type ListItemProps = {
 }
 
 export function ProductsListItem({ product }: ListItemProps) {
-	const { id, thumbnail, name, discountPrice, quantity: maxQuantity, quantityInCart } =
-		product
+	const {
+		id,
+		thumbnail,
+		name,
+		discountPrice,
+		quantity: maxQuantity,
+		quantityInCart
+	} = product
+	const [isThumbnailError, setIsThumbnailError] = useState(false)
 
 	const [initQuantity, setInitQuantity] = useState(quantityInCart)
 	return (
@@ -33,9 +41,15 @@ export function ProductsListItem({ product }: ListItemProps) {
 				className={'h-48 w-48 relative flex-shrink-0'}
 			>
 				<Image
-					src={thumbnail}
+					src={
+						isThumbnailError
+							? '/images/placeholder/product-thumbnail.jpg'
+							: thumbnail
+					}
 					alt={name}
+					unoptimized
 					fill
+					onError={() => setIsThumbnailError(true)}
 					sizes={
 						'(max-width: 640px) 100vw, ' +
 						'(max-width: 768px) 50vw, ' +
@@ -56,9 +70,13 @@ export function ProductsListItem({ product }: ListItemProps) {
 					setQuantity={setInitQuantity}
 					maxQuantity={maxQuantity}
 				/>
+
+				<DeleteProductFromCartButton productId={id} />
 				<div className={'flex justify-between mt-3 w-48 sm:mt-20'}>
 					Итого:
-					<span className={'text-[#F7C04F] font-bold'}>{Number(discountPrice) * initQuantity}</span>
+					<span className={'text-[#F7C04F] font-bold'}>
+						{Number(discountPrice) * initQuantity}
+					</span>
 				</div>
 			</div>
 		</li>
