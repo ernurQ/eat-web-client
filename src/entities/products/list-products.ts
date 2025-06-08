@@ -1,10 +1,8 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { api, queryClient } from '@/shared/api'
+import { api, backendUrl, queryClient } from '@/shared/api'
 
 import { meQueryOptions } from '@/entities/auth'
-
-import { backendUrl } from '../../shared/api/base'
 
 type Data = {
 	page: number
@@ -21,13 +19,13 @@ type ResponseData = {
 		branchName: string
 		branchLocation: string
 		branchLocationGeo: {
-			coordinates: number[]
+			coordinates: [number, number]
 		}
 		categoryName: string
 		name: string
 		description: string
 		thumbnail: string[]
-		price: string
+		price: number
 		discountPrice: number
 		quantity: number
 		expirationDate: string
