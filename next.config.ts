@@ -5,7 +5,13 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'http',
-				hostname: '67.207.69.179',
+				hostname: 'localhost',
+				port: '',
+				pathname: '/**'
+			},
+			{
+				protocol: 'http',
+				hostname: 'api.eatweb.food',
 				port: '',
 				pathname: '/**'
 			}
@@ -16,7 +22,7 @@ const nextConfig: NextConfig = {
 			return [
 				{
 					source: '/api/:path*',
-					destination: 'http://67.207.69.179/api/:path*'
+					destination: 'http://localhost/api/:path*'
 				}
 			]
 		}

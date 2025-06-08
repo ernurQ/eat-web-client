@@ -2,8 +2,8 @@ import axios from 'axios'
 
 import { tokenService } from '@/shared/lib/token-service'
 
-export const backendUrl = 'http://67.207.69.179'
-const baseURL = '/api'
+export const backendUrl = 'https://api.eatweb.food/'
+const baseURL = 'https://api.eatweb.food/api'
 
 const api = axios.create({
 	baseURL,
