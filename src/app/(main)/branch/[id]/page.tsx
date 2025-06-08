@@ -8,12 +8,13 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { branchInfoQueryOptions } from '@/entities/branch/branch-info'
 
 export default function CompanyProfilePage() {
 	const { id } = useParams<{ id: string }>()
+	const [isThumbnailError, setIsThumbnailError] = useState(false)
 
 	const {
 		data: branch,
@@ -45,8 +46,11 @@ export default function CompanyProfilePage() {
 					<div className='w-40 h-40 md:w-48 md:h-48 relative'>
 						<Image
 							src={
-								branch.thumbnail || '/images/placeholder/branch-thumbnail.png'
+								isThumbnailError
+									? '/images/placeholder/branch-thumbnail.png'
+									: branch.thumbnail
 							}
+							onError={() => setIsThumbnailError(true)}
 							alt={`${branch.name} logo`}
 							fill
 							sizes={'300px'}
