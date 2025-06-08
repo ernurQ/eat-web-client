@@ -7,7 +7,7 @@ type ResponseData = {
 		product: {
 			id: string
 			name: string
-			thumbnail: Array<string>
+			thumbnail: Array<string> | null
 			price: number
 			discountPrice: number
 			quantity: number
@@ -30,7 +30,7 @@ export function getCartOptions() {
 					({ product, quantity: quantityInCart }) => ({
 						...product,
 						quantityInCart,
-						thumbnail: `${backendUrl}/api/products/images/${(product.thumbnail.at(-1) || '').split('/').slice(1).join('/')}`,
+						thumbnail: `${backendUrl}/api/products/images/${(product.thumbnail?.at(-1) || '').split('/').slice(1).join('/')}`,
 						totalPrice: quantityInCart * product.discountPrice
 					})
 				),

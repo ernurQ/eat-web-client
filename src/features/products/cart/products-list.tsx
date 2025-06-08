@@ -1,14 +1,24 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { cn } from '@/shared/lib/classnames'
 
-import { ProductsListItem } from '@/features/products/cart/products-list-item'
-import { useQuery } from '@tanstack/react-query'
 import { getCartOptions } from '@/entities/cart/get-cart'
 
+import { ProductsListItem } from '@/features/products/cart/products-list-item'
+
 export function ProductsList() {
-	const { data: products, isPending, isError } = useQuery(getCartOptions())
+	const {
+		data: products,
+		isPending,
+		isError,
+		error
+	} = useQuery(getCartOptions())
 
 	if (isPending) return <Skeleton />
-	if (isError) throw Error('feature.cart.product-list')
+	if (isError) {
+		console.log(error)
+		return <div>something went wrong</div>
+	}
 
 	return (
 		<ul className={'border-b-[1px] border-b-black px-4 mt-10'}>
