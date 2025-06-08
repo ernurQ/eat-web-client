@@ -1,5 +1,6 @@
 'use client'
 
+import { GoogleOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -150,6 +151,19 @@ export default function LoginPage() {
 					>
 						Войти
 					</button>
+
+					<div className={'flex justify-center items-center'}>
+						<div className={'block bg-black h-[1px] w-[30px] mr-3'}></div>
+						<span>Или войдите через</span>
+						<div className={'block bg-black h-[1px] w-[30px] ml-3'}></div>{' '}
+					</div>
+
+					<Link
+						className={'block text-center text-2xl text-blue-500'}
+						href={'https://api.eatweb.food/api/auth/users/google/login'}
+					>
+						<GoogleOutlined />
+					</Link>
 				</form>
 			</div>
 		</div>
