@@ -6,14 +6,9 @@ import { Navbar } from '@/app/(main)/_ui/navbar'
 export default function MainLayout({ children }: PropsWithChildren) {
 	return (
 		<>
-				<Navbar />
-				{children}
-				<Footer />
+			<Navbar />
+			{children}
+			<Footer />
 		</>
 	)
 }
-
-<script
-    src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU"
-    defer
-/>

@@ -9,6 +9,7 @@ import { routes } from '@/shared/config/routes'
 
 import { productInfoOptions } from '@/entities/products'
 import { addToCartOptions } from '@/entities/products/cart'
+import GoogleMap from '@/features/geocoding/Geocoding'
 
 type Props = {
 	productId: string
@@ -154,6 +155,8 @@ function AddToCartForm({
 
 			<p className='text-gray-700 mt-5'>{product.description}</p>
 			<p>Состав: {product.composition}</p>
+
+			<GoogleMap branchName={product.branchName} branchLocation={product.branchLocation} lng={product.branchLocationGeo.coordinates[0]} lat={product.branchLocationGeo.coordinates[1]} />
 
 			<div className='flex justify-between items-center mt-5'>
 				<div className='flex items-center space-x-4'>

@@ -60,9 +60,9 @@ export function ProductsListItem({ product, isFavorite }: Props) {
 							{product.branchId && (
 								<Link
 									href={routes.branch.profile(product.branchId)}
-									className={'text-[#228536]'}
+									className={'text-[#228536] text-xs'}
 								>
-									{product.branchName} + Location
+									{product.branchName}, {product.branchLocation}
 								</Link>
 							)}
 						</div>

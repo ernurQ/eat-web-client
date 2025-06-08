@@ -10,6 +10,10 @@ type ResponseData = {
 	id: string
 	branchId: string
 	branchName: string
+	branchLocation: string
+	branchLocationGeo: {
+		coordinates: number[]
+	}
 	categoryName: string
 	name: string
 	description: string
@@ -26,15 +30,14 @@ type ResponseData = {
 	version: number
 }
 
-
-	export function productInfoOptions(data: Data) {
-		const { productId } = data
-		return queryOptions({
-			queryKey: ['product-info', productId],
-			queryFn: () =>
-				api.get<ResponseData>(`/products/${productId}`).then((res) => ({
-					...res.data,
-					thumbnail: `${backendUrl}/api/products/images/${(res.data.thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
-				}))
-		})
-	}
+export function productInfoOptions(data: Data) {
+	const { productId } = data
+	return queryOptions({
+		queryKey: ['product-info', productId],
+		queryFn: () =>
+			api.get<ResponseData>(`/products/${productId}`).then((res) => ({
+				...res.data,
+				thumbnail: `${backendUrl}/api/products/images/${(res.data.thumbnail.at(-1) || '').split('/').slice(1).join('/')}`
+			}))
+	})
+}

@@ -73,14 +73,13 @@ export default function RegisterBranchPage() {
 			lat: number
 			lng: number
 		}
-		const formatted = candidate.formatted_address || candidate.name
 
 		registerBranch({
 			...data,
 			document: file,
 			city,
 			branchName,
-			location: formatted,
+			location,
 			latitude: lat.toString(),
 			longitude: lng.toString()
 		})
