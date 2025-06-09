@@ -1,23 +1,21 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { Navbar } from "@/app/(main)/_ui/navbar"; 
-import { OrdersTab } from './ui/orders-section';
-import { AccountTab } from './ui/account-section';
-import { PaymentTab } from './ui/payment-section';
-import { meQueryOptions } from '@/entities/auth';
-import { useQuery } from '@tanstack/react-query';
+import { meQueryOptions } from '@/entities/auth'
+
+import { AccountTab } from './ui/account-section'
+import { OrdersTab } from './ui/orders-section'
+import { Navbar } from '@/app/(main)/_ui/navbar'
 
 export default function ProfilePage() {
-	const [activeTab, setActiveTab] = useState<'orders' | 'account' | 'payment'>(
-		'account'
-	)
+	const [activeTab, setActiveTab] = useState<'orders' | 'account'>('orders')
 
-	const {data} = useQuery(meQueryOptions())
+	const { data } = useQuery(meQueryOptions())
 
-	return (	
+	return (
 		<>
 			<Navbar />
 			<main className='max-w-screen-xl mx-auto px-4 py-6'>
@@ -30,7 +28,9 @@ export default function ProfilePage() {
 						className='rounded-full object-cover'
 					/>
 					<div>
-						<h2 className='text-xl font-semibold'>{data?.user.name} {data?.user.surname}</h2>
+						<h2 className='text-xl font-semibold'>
+							{data?.user.name} {data?.user.surname}
+						</h2>
 					</div>
 				</div>
 
@@ -51,19 +51,10 @@ export default function ProfilePage() {
 					>
 						Мой аккаунт
 					</button>
-					<button
-						onClick={() => setActiveTab('payment')}
-						className={
-							activeTab === 'payment' ? 'font-semibold text-green-700' : ''
-						}
-					>
-						Оплата
-					</button>
 				</div>
 
 				{activeTab === 'orders' && <OrdersTab />}
 				{activeTab === 'account' && <AccountTab />}
-				{activeTab === 'payment' && <PaymentTab />}
 			</main>
 		</>
 	)
