@@ -36,7 +36,7 @@ export function updateProductOptions() {
 
 					name: data.name,
 					categoryName: data.categoryName,
-					expirationDate: data.expirationDate,
+					expirationDate: new Date(data.expirationDate).toISOString(),
 					quantity: data.quantity,
 					price: data.price,
 					discountPrice: data.discountPrice,
