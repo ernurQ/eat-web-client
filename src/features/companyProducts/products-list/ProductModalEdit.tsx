@@ -24,7 +24,7 @@ type UpdateProductInputs = {
 
 	name: string
 	categoryName: string
-	expirationDate: Date
+	expirationDate: string
 	quantity: number
 	price: number
 	discountPrice: number
@@ -43,7 +43,7 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 		defaultValues: {
 			...product,
 			thumbnail: undefined,
-			expirationDate: new Date(product.expirationDate)
+			expirationDate: product.expirationDate
 		}
 	})
 
@@ -71,7 +71,7 @@ export default function ProductModalEdit({ product, onCloseAction }: Props) {
 			thumbnail,
 			productId: product.id,
 			branchId: product.branchId,
-			expirationDate: values.expirationDate.toISOString()
+			expirationDate: values.expirationDate
 		})
 	}
 
